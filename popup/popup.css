@@ -1,0 +1,45 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 17em;
+  overflow: hidden;
+  padding: 0.25em;
+}
+
+.imagebox-wrapper {
+  width: 300%;
+  margin-left: 0em;
+  transition: margin-left 0.25s;
+}
+
+.imagebox {
+  float: left;
+  width: 17em;
+}
+
+.imagebox1 .image {
+  background-color: rgba(188, 218, 56, 1);
+}
+
+.imagebox2 .image {
+  background-color: rgba(255, 119, 0, 1);
+}
+
+.image {
+  display: block;
+  float: left;
+  width: 5em;
+  height: 5em;
+  margin: 0.25em;
+  padding: 0;
+}
+
+.image:active {
+  opacity: 0.8;
+  transition: 500ms background-color;
+}
+
+.image:hover {
+  transform: scale(0.95);
+  transition: transform 0.1s;
+}
