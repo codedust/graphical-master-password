@@ -12,12 +12,20 @@
 }
 
 #container button.warn {
-    background-color: #7a2e2a;
-    color: #ffffff;
+    background-color: #7a2e2a;    
+}
+
+#container button.highlight {
+    background-color: #89d16e;    
+}
+
+#container button.secondary {
+    background-color: #C0C0C0;  
 }
 
 #container h1 {
 	font-size: 22px;
+	margin: 9px 0 8px 0;
 }
 
 #container p {
@@ -52,7 +60,7 @@
 #container button {
 	cursor: pointer;
     border: none;
-    padding: 4% 8%;
+    padding: 3% 4%;
     text-align: center;
     text-decoration: none;
     display: block;
@@ -86,11 +94,15 @@
 	text-align: center;
 }
 
-#container .passwordDisplay > div > img {
+#container .passwordDisplay > img {
 	width: 100%;
 }
 
 #container  .passwordGallery > div > img:hover {
 	cursor: pointer;
 	opacity: 1.0;
+}
+
+#container .hidden {
+	display: none;
 }

@@ -9,7 +9,7 @@ $(function() {
 
 	/* Helper Functions */
 	
-	function prepareSetup() {
+	function prepareSetupSteps() {
 		clickCount = 0;
 		newPassword = PassMan.createPassword();
 		propagateSetupClickCount();
@@ -46,7 +46,25 @@ $(function() {
 	}
 
 	function propagateSetupClickCount() {
-		$('#setupSteps span.currentStep').text(clickCount + 1);
+		$('#container .view#setupSteps span.currentStep').text(clickCount + 1);
+		
+		var nextButton = previousButton = $('#container .view#setupSteps > div > button.nextButton');
+		var previousButton = $('#container .view#setupSteps > div > button.previousButton');
+		var finishButton = $('#container .view#setupSteps > div > button.finishButton');
+		
+		if (clickCount === 0) {
+			previousButton.addClass('hidden');
+		} else {
+			previousButton.removeClass('hidden');
+		}
+		
+		if (clickCount + 1 < Config.NUM_PASSWORD_PARTS) {
+			nextButton.removeClass('hidden');
+			finishButton.addClass('hidden');
+		} else {
+			nextButton.addClass('hidden');
+			finishButton.removeClass('hidden');
+		}		
 	}
 	
 	function setActiveView(viewId) {
@@ -69,7 +87,7 @@ $(function() {
 	/* Event Handling */
 	
 	$('#container .view#setup .startButton').click(function() {
-		prepareSetup();		
+		prepareSetupSteps();		
 		setActiveView('setupSteps');
 	});
 	
@@ -79,13 +97,22 @@ $(function() {
 	
 	$('#container .view#setupSteps .nextButton').click(function() {
 		clickCount++;
-				
-		if (clickCount < Config.NUM_PASSWORD_PARTS) {
-			propagateSetupClickCount();
-			showNextSetupImage();
+		propagateSetupClickCount();
+		showNextSetupImage();		
+	});
+	
+	$('#container .view#setupSteps .previousButton').click(function() {
+		if (clickCount <= 0) {
 			return;
 		}
-		
+
+		clickCount--;
+		propagateSetupClickCount();
+		showNextSetupImage();
+	});
+	
+	$('#container .view#setupSteps .finishButton').click(function() {
+		PassMan.savePassword();
 		setActiveView('setupComplete');
 	});
 	
@@ -95,7 +122,7 @@ $(function() {
 		clickCount++;
 		
 		if (clickCount === Config.NUM_STEPS_PER_LOGIN) {
-			if (PassMan.getIsValidLoginCombination(selectedCollectionIds, selectedItemIds)) {
+			if (PassMan.getIsValidLoginCombination(selectedCollectionIds, selectedItemIds)) {				
 				setActiveView('loggedIn');
 			}
 			else {
@@ -125,7 +152,7 @@ $(function() {
 	
 	$('#container .view#forgotPassword .resetPasswordButton').click(function() {
 		PassMan.removePassword();
-		prepareSetup();
+		prepareSetupSteps();
 		setActiveView('setup');
 	});
 });

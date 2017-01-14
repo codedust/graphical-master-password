@@ -46,18 +46,21 @@
 		for (var i = 0; i < randArr.length; i++) {
 			savedPassword.itemIds.push(availableItemIds[randArr[i] % availableItemIds.length]);
 		}
-		
-		localStorage.setItem('savedPassword', JSON.stringify(savedPassword));
+				
 		return savedPassword;
 	};
 	
-	function removePassword() {
-		localStorage.removeItem('savedPassword');
+	function savePassword() {
+		localStorage.setItem('savedPassword', JSON.stringify(savedPassword));
+	}
 
+	function removePassword() {
 		savedPassword = {
 			collectionIds: [],
 			itemIds: []
-		}	
+		}
+
+		localStorage.removeItem('savedPassword');
 	}	
 	
 	function getRandomizedPasswordCollectionIds() {
@@ -104,6 +107,7 @@
     PassMan = {
 		createPassword: createPassword,
 		getHasSavedPassword: getHasSavedPassword,
+		savePassword: savePassword,
 		removePassword: removePassword,
 		getRandomizedPasswordCollectionIds: getRandomizedPasswordCollectionIds,
 		getRandomizedCollectionItemIds: getRandomizedCollectionItemIds,
