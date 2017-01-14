@@ -1,36 +1,103 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="popup.css"/>
+	<meta charset="utf-8">
+	<title>Graphical Password Manager</title>
+	<link rel="stylesheet" href="popup.css" type="text/css">	
 </head>
-
 <body>
-  <div class="imagebox-wrapper">
-    <div class="imagebox imagebox1">
-      <div class="image image1"></div>
-      <div class="image image2"></div>
-      <div class="image image3"></div>
-      <div class="image image4"></div>
-      <div class="image image5"></div>
-      <div class="image image6"></div>
-      <div class="image image7"></div>
-      <div class="image image8"></div>
-      <div class="image image9"></div>
-    </div>
-    <div class="imagebox imagebox2">
-      <div class="image image1"></div>
-      <div class="image image2"></div>
-      <div class="image image3"></div>
-      <div class="image image4"></div>
-      <div class="image image5"></div>
-      <div class="image image6"></div>
-      <div class="image image7"></div>
-      <div class="image image8"></div>
-      <div class="image image9"></div>
-    </div>
-  </div>
-  <script src="jquery-3.1.1.min.js"></script>
-  <script src="popup.js"></script>
+	<div id="container">
+		<div class="view" id="setup">
+			<h1>Setup Required</h1>
+			<div>
+				<p>You have not set up a graphical password yet.</p>
+				<p>Once you are ready, a sequence of <span class="numPasswordParts"></span> images will be presented to you. These images will make up your graphical password. Memorize them well!</p>	
+			</div>
+			<div>
+				<button class="startButton">I'm ready</button>
+			</div>
+		</div>
+		<div class="view" id="setupSteps">
+			<h1>Setup (Step <span class="currentStep"></span> of <span class="numPasswordParts"></span>)</h1>
+			<div class="passwordDisplay">
+				<img />				
+			</div>
+			<div>
+				<button class="nextButton">Next</button>
+				<!--<button class="previousButton">Previous</button>-->
+				<button class="warn cancelButton">Cancel</button>
+			</div>
+		</div>
+		<div class="view" id="setupComplete">
+			<h1>Setup Complete</h1>
+			<div>
+				<p>Whenever you log in, you will be presented with <span class="numStepsPerLogin"></span> random image galleries. Each gallery will contain one of the images from your graphical password. Click on each of these images to authenticate yourself.</p>
+			</div>
+			<div>
+				<button class="loginButton">Login Now</button>
+			</div>
+		</div>
+		<div class="view" id="login">
+			<h1>Enter Password</h1>
+			<div class="passwordGallery">
+				<div>
+					<img /><img /><img /><img />
+				</div>
+				<div>
+					<img /><img /><img /><img />
+				</div>
+				<div>
+					<img /><img /><img /><img />
+				</div>
+				<div>
+					<img /><img /><img /><img />
+				</div>
+			</div>
+			<div>
+				<button class="forgotPasswordButton">I forgot my password</button>
+			</div>
+		</div>
+		<div class="view" id="loginFailed">
+			<h1>Login Failed</h1>
+			<div>
+				<p>You must have screwed up somewhere!</p>
+			</div>
+			<div>
+				<button class="loginButton">Try Again</button>
+			</div>
+		</div>
+		<div class="view" id="loggedIn">
+			<h1>Logged In</h1>
+			<div>
+				<p>You know what's great? You're logged in!</p>
+			</div>
+			<div>
+				<button class="changePasswordButton">Change Password</button>
+				<button class="warn logoutButton">Logout</button>
+			</div>
+		</div>		
+		<div class="view" id="forgotPassword">
+			<h1>Password Forgotten</h1>
+			<div>
+				<p>Now, that really is unfortunate for you...</p>
+			</div>
+			<div>
+				<button class="okButton">OK</button>
+			</div>
+		</div>
+		<div class="view" id="changePassword">
+			<h1>Change Password</h1>
+			<div>
+				<p>What has been seen cannot be unseen...</p>
+			</div>
+			<div>
+				<button class="warn cancelButton">Cancel</button>
+			</div>
+		</div>
+	</div>
+	<script src="jquery-3.1.1.min.js" type="text/javascript"></script>
+	<script src="config.js" type="text/javascript"></script>
+	<script src="passman.js" type="text/javascript"></script>
+	<script src="popup.js" type="text/javascript"></script>
 </body>
 </html>

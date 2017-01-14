@@ -1,45 +1,92 @@
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 17em;
-  overflow: hidden;
-  padding: 0.25em;
+/* Styles for easy theming */
+
+#container {
+	font-family: Sans-serif, Arial;
+	width: 400px;
 }
 
-.imagebox-wrapper {
-  width: 300%;
-  margin-left: 0em;
-  transition: margin-left 0.25s;
+#container button {
+    background-color: #53a7ea;
+    color: #ffffff;
+    font-size: 16px;
 }
 
-.imagebox {
-  float: left;
-  width: 17em;
+#container button.warn {
+    background-color: #7a2e2a;
+    color: #ffffff;
 }
 
-.imagebox1 .image {
-  background-color: rgba(188, 218, 56, 1);
+#container h1 {
+	font-size: 22px;
 }
 
-.imagebox2 .image {
-  background-color: rgba(255, 119, 0, 1);
+#container p {
+	font-size: 16px;
 }
 
-.image {
-  display: block;
-  float: left;
-  width: 5em;
-  height: 5em;
-  margin: 0.25em;
-  padding: 0;
+#container .passwordGallery > div > img:hover {
+	border-bottom-color: #53a7ea;
 }
 
-.image:active {
-  opacity: 0.8;
-  transition: 500ms background-color;
+#container .passwordGallery > div > img {
+	border-bottom-width: 5px;	
 }
 
-.image:hover {
-  transform: scale(0.95);
-  transition: transform 0.1s;
+/* Other styles */
+#container {
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+#container h1 {
+	text-align: center;
+}
+
+#container p {
+	user-select: none;
+	text-align: justify;
+}
+
+#container button {
+	cursor: pointer;
+    border: none;
+    padding: 4% 8%;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+	width: 100%;
+	margin: 1% 0;
+	opacity: 0.8;
+}
+
+#container button:hover {
+	opacity: 1.0;
+}
+
+#container .view {
+	display: none;
+}
+
+#container .view.active {
+	display: block;
+}
+
+#container .passwordGallery > div > img {
+	width: 21%;
+	margin: 1% 2%;
+	padding: 1% 0;
+	opacity: 0.7;
+	border-color: transparent;
+	border-bottom-style: solid;	
+}
+
+#container .passwordDisplay > div > img {
+	width: 100%;
+}
+
+#container  .passwordGallery > div > img:hover {
+	cursor: pointer;
+	opacity: 1.0;
 }
