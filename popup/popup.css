@@ -82,6 +82,10 @@
 	border-bottom-style: solid;	
 }
 
+#container .passwordDisplay {
+	text-align: center;
+}
+
 #container .passwordDisplay > div > img {
 	width: 100%;
 }

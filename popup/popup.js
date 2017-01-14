@@ -1,14 +1,19 @@
 $(function() {
+	/* Misc Variables */
+	
 	var clickCount;
 	var newPassword;
 	var passwordCollectionIds;
 	var selectedCollectionIds;
 	var selectedItemIds;
+
+	/* Helper Functions */
 	
 	function prepareSetup() {
 		clickCount = 0;
 		newPassword = PassMan.createPassword();
 		propagateSetupClickCount();
+		showNextSetupImage();
 	}
 	
 	function prepareLogin() {
@@ -16,6 +21,7 @@ $(function() {
 		passwordCollectionIds = PassMan.getRandomizedPasswordCollectionIds();
 		selectedCollectionIds = [];
 		selectedItemIds = [];
+		showLoginGallery(passwordCollectionIds[0]);		
 	}
 	
 	function showNextSetupImage() {
@@ -48,18 +54,22 @@ $(function() {
 		$('.view#' + viewId).addClass('active');
 	}
 
+	/* Initialization */
+	
 	$('#container span.numStepsPerLogin').text(Config.NUM_STEPS_PER_LOGIN);
 	$('#container span.numPasswordParts').text(Config.NUM_PASSWORD_PARTS);
 	
 	if (!PassMan.getHasSavedPassword()) {
 		setActiveView('setup');
 	} else {
-		setActiveView('enterPassword');
+		prepareLogin();
+		setActiveView('login');
 	}
-		
+
+	/* Event Handling */
+	
 	$('#container .view#setup .startButton').click(function() {
-		prepareSetup();
-		showNextSetupImage();
+		prepareSetup();		
 		setActiveView('setupSteps');
 	});
 	
@@ -98,7 +108,6 @@ $(function() {
 
 	$('#container .view#setupComplete .loginButton, #container .view#loginFailed .loginButton, #container .view#forgotPassword .okButton, #container .view#loggedIn .logoutButton').click(function() {
 		prepareLogin();
-		showLoginGallery(passwordCollectionIds[clickCount]);
 		setActiveView('login');
 	});
 
@@ -112,5 +121,11 @@ $(function() {
 	
 	$('#container .view#changePassword .cancelButton').click(function() {
 		setActiveView('loggedIn');
+	});
+	
+	$('#container .view#forgotPassword .resetPasswordButton').click(function() {
+		PassMan.removePassword();
+		prepareSetup();
+		setActiveView('setup');
 	});
 });
