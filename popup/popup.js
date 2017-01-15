@@ -150,7 +150,7 @@ $(function() {
 		setActiveView('loggedIn');
 	});
 	
-	$('#container .view#forgotPassword .resetPasswordButton').click(function() {
+	$('#container .view#forgotPassword .resetPasswordButton, #container .view#changePassword .resetPasswordButton').click(function() {
 		PassMan.removePassword();
 		prepareSetupSteps();
 		setActiveView('setup');
