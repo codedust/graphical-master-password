@@ -108,7 +108,7 @@
 			var pairs = [];
 			
 			for (var i = 0; i < collectionIds.length; i++) {
-				pairs.push({ collectionId: + collectionIds[i] + '', itemId: itemIds[i] });
+				pairs.push({ collectionId: + collectionIds[i] + '', itemId: itemIds[i] + ''});
 			}
 
 			pairs.sort(function(a, b){
