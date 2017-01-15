@@ -21,7 +21,7 @@ $(function() {
 		passwordCollectionIds = PassMan.getRandomizedPasswordCollectionIds();
 		selectedCollectionIds = [];
 		selectedItemIds = [];
-		showLoginGallery(passwordCollectionIds[0]);		
+		showLoginGallery(passwordCollectionIds[0]);
 	}
 	
 	function showNextSetupImage() {
@@ -38,7 +38,7 @@ $(function() {
 			if (index >= itemIds.length) {
 				return;
 			}
-	
+			
 			$(this).attr('src', Config.IMG_BASE_DIR + collectionId + '/' + itemIds[index] + Config.IMG_FILE_EXTENSION);
 			$(this).attr('data-collection', collectionId);
 			$(this).attr('data-item', itemIds[index]);
