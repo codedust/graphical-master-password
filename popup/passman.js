@@ -1,8 +1,9 @@
 (function(){
 	var availableCollectionIds = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'];
 	var availableItemIds = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'];
-	var savedPassword = JSON.parse(localStorage.getItem('savedPassword')) || { collectionIds: [], itemIds: [] };
 	
+	var savedPassword = getSavedPassword();
+		
 	function makeHash(arr, salt, rounds) {
 		var input = arr.toString() + salt;
 		var count = 0;
@@ -69,9 +70,26 @@
 		if (Config.NUM_STEPS_PER_LOGIN === 4 && Config.NUM_PASSWORD_PARTS === 10) {
 			savePassword1004(savedPassword.collectionIds, savedPassword.itemIds);
 			return;
-		}
+		}	
 		
-		localStorage.setItem('savedPassword', JSON.stringify(savedPassword));		
+		// TODO BLAKLEY: Save the password data (see below) and protect it with Blakley secret sharing.
+		//
+		// At this point, you have two arrays with password data:
+		//
+		// - savedPassword.collectionIds: This array contains the IDs of the galleries (ID = relative path name).
+		// - savedPassword.itemIds: This array contains CORRESPONDING IDs that make up the password (ID = filename without extension)
+		//
+		// "Corresponding" means that the index of the gallery and the index of the item match. E.g., if image "5" from gallery "7" 
+		// and image "6" of gallery "9" were assigned to the user as a password, these arrays would like this:
+		//
+		// - savedPassword.collectionIds = ["7", "9"] (actual length == Config.NUM_STEPS_PER_LOGIN)
+		// - savedPassword.itemIds = ["5", "6"] (actual length == Config.NUM_PASSWORD_PARTS)
+		//
+		// Please note that while currently all IDs are numbers, these might as well be strings.
+		
+		// If you want to use a different variable name or storage location, you can replace this line. In this case you will also
+		// have to change how the password is retrieved and removed.
+		localStorage.setItem('savedPassword', JSON.stringify(savedPassword));
 	}
 
 	function removePassword() {
@@ -80,6 +98,13 @@
 			itemIds: []
 		}
 
+		if (Config.NUM_STEPS_PER_LOGIN === 4 && Config.NUM_PASSWORD_PARTS === 10) {
+			removePassword1004();
+			return;
+		}
+		
+		// TODO BLAKLEY: You can change the following line to point to whatever storage location you store your password data at.
+		// If you do, make sure that you also changed the location where the password is stored and retrieved from.
 		localStorage.removeItem('savedPassword');
 	}	
 	
@@ -103,30 +128,22 @@
 		if (!collectionIds || !itemIds || collectionIds.length != Config.NUM_STEPS_PER_LOGIN || itemIds.length != Config.NUM_STEPS_PER_LOGIN) {
 			return false;
 		}
-		
+
 		if (Config.NUM_STEPS_PER_LOGIN === 4 && Config.NUM_PASSWORD_PARTS === 10) {
-			var pairs = [];
-			
-			for (var i = 0; i < collectionIds.length; i++) {
-				pairs.push({ collectionId: + collectionIds[i] + '', itemId: itemIds[i] + ''});
-			}
-
-			pairs.sort(function(a, b){
-				if(a.collectionId < b.collectionId) return -1;
-				if(a.collectionId > b.collectionId) return 1;
-				return 0;
-			});
-			
-			var combinedInput = [];			
-			for (var i = 0; i < pairs.length; i++) {
-				combinedInput.push(pairs[i].collectionId);
-				combinedInput.push(pairs[i].itemId);
-			}
-
-			var hash = makeHash(combinedInput, savedPassword.salt, savedPassword.rounds);
-			return ($.inArray(hash, savedPassword.passwordHashes) > -1);
+			return getIsValidLoginCombination1004(collectionIds, itemIds);
 		}
 
+		// TODO BLAKLEY: Check whether the input supplied by the user matches a valid password variation.
+		// 
+		// The user has supplied the following data:
+		//
+		// - collectionIds: This array contains the IDs of the galleries (ID = relative path name) the user has selected.
+		// - itemIds: This array contains CORRESPONDING IDs that make up the password (ID = filename without extension) the user has selected.
+		//
+		// The collections are linked, e.g. itemIds[3] corresponds to collectionIds[3]. See comments in savePassword() for more details for the
+		// data stored within the arrays.
+		// 
+		// Return "true" if the user entered a valid password. Your code should replace the following lines completely.
 		var checkedCollectionIds = [];
 
 		for (var i = 0; i < Config.NUM_STEPS_PER_LOGIN; i++) {
@@ -150,6 +167,57 @@
 		return true;
 	}
 	
+	function getSavedPassword() {
+		if (Config.NUM_STEPS_PER_LOGIN === 4 && Config.NUM_PASSWORD_PARTS === 10) {
+			return getSavedPassword1004();
+		}
+
+		// TODO BLAKLEY: You can replace the following code to point to a different location or structure.
+		//
+		// BUT: Currently other parts of this library operate on the savedPassword object and expect it to
+		// have the properties "collectionIds" and "itemIds". Thus, if you change this structure, you will
+		// have to make changes in other places as well. Please try not to break the functionality of the
+		// methods with the "1004" suffix when doing this.
+		//
+		// Info on what the arrays that the properties point to contain can be found in the comments for
+		// the savePassword() method.
+		var pass = JSON.parse(localStorage.getItem('savedPassword')) || { collectionIds: [], itemIds: [] };
+		return pass;
+	}
+	
+	function getSavedPassword1004() {
+		var pass = JSON.parse(localStorage.getItem('savedPassword')) || { collectionIds: [], itemIds: [] };
+		return pass;
+	}
+		
+	function getIsValidLoginCombination1004(collectionIds, itemIds) {	
+		var pairs = [];
+		
+		for (var i = 0; i < collectionIds.length; i++) {
+			pairs.push({ collectionId: + collectionIds[i] + '', itemId: itemIds[i] + ''});
+		}
+
+		pairs.sort(function(a, b){
+			if(a.collectionId < b.collectionId) return -1;
+			if(a.collectionId > b.collectionId) return 1;
+			return 0;
+		});
+		
+		var combinedInput = [];			
+		for (var i = 0; i < pairs.length; i++) {
+			combinedInput.push(pairs[i].collectionId);
+			combinedInput.push(pairs[i].itemId);
+		}
+
+		var hash = makeHash(combinedInput, savedPassword.salt, savedPassword.rounds);
+		return ($.inArray(hash, savedPassword.passwordHashes) > -1);
+	}
+
+		
+	function removePassword1004() {
+		localStorage.removeItem('savedPassword');
+	}
+		
 	function savePassword1004(col, val) {
 		console.log(JSON.stringify(col));
 		var salt = window.crypto.getRandomValues(new Uint32Array(1)).toString();
