@@ -85,10 +85,8 @@
 		// - savedPassword.collectionIds = ["7", "9"] (actual length == Config.NUM_STEPS_PER_LOGIN)
 		// - savedPassword.itemIds = ["5", "6"] (actual length == Config.NUM_PASSWORD_PARTS)
 		//
-		// Please note that while currently all IDs are numbers, these might as well be strings.
-		
-		// If you want to use a different variable name or storage location, you can replace this line. In this case you will also
-		// have to change how the password is retrieved and removed.
+		// Please note that while currently all IDs are numbers, these might as well be strings. Adjust the following so that it saves
+		// the encrypted password information according to your needs. Currently, the password is saved in clear text.
 		localStorage.setItem('savedPassword', JSON.stringify(savedPassword));
 	}
 
@@ -137,11 +135,11 @@
 		// 
 		// The user has supplied the following data:
 		//
-		// - collectionIds: This array contains the IDs of the galleries (ID = relative path name) the user has selected.
-		// - itemIds: This array contains CORRESPONDING IDs that make up the password (ID = filename without extension) the user has selected.
+		// - collectionIds: This array contains the IDs of the galleries (ID = relative path name).
+		// - itemIds: This array contains CORRESPONDING IDs that make up the password (ID = filename without extension).
 		//
 		// The collections are linked, e.g. itemIds[3] corresponds to collectionIds[3]. See comments in savePassword() for more details for the
-		// data stored within the arrays.
+		// data stored inside the arrays.
 		// 
 		// Return "true" if the user entered a valid password. Your code should replace the following lines completely.
 		var checkedCollectionIds = [];
