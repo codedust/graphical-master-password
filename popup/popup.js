@@ -2,7 +2,7 @@ $(function() {
   /* Misc Variables */
 
   var clickCount;
-  var newPassword;
+  var portfolio;
   var passwordCollectionIds;
   var selectedCollectionIds;
   var selectedItemIds;
@@ -11,22 +11,25 @@ $(function() {
 
   function prepareSetupSteps() {
     clickCount = 0;
-    newPassword = PassMan.createPassword();
-    propagateSetupClickCount();
-    showNextSetupImage();
+    PassMan.createPortfolio().then(function(newPortfolio){
+      portfolio = newPortfolio;
+      console.log(portfolio);
+      propagateSetupClickCount();
+      showNextSetupImage();
+    });
   }
 
   function prepareLogin() {
     clickCount = 0;
-    passwordCollectionIds = PassMan.getRandomizedPasswordCollectionIds();
+    passwordCollectionIds = PassMan.getRandomizedCollectionIds();
     selectedCollectionIds = [];
     selectedItemIds = [];
     showLoginGallery(passwordCollectionIds[0]);
   }
 
   function showNextSetupImage() {
-    var collectionId = newPassword.collectionIds[clickCount];
-    var itemId = newPassword.itemIds[clickCount];
+    var collectionId = portfolio.collectionIds[clickCount];
+    var itemId = portfolio.itemIds[clickCount];
 
     $('#container .view#setupSteps .passwordDisplay img').attr('src', Config.IMG_BASE_DIR + collectionId + '/' + itemId + Config.IMG_FULLSIZE_FILENAME_SUFFIX + Config.IMG_FILE_EXTENSION);
   }
@@ -77,7 +80,7 @@ $(function() {
   $('#container span.numStepsPerLogin').text(Config.NUM_STEPS_PER_LOGIN);
   $('#container span.numPasswordParts').text(Config.NUM_PASSWORD_PARTS);
 
-  if (!PassMan.getHasSavedPassword()) {
+  if (!PassMan.portfolioInitialized()) {
     setActiveView('setup');
   } else {
     prepareLogin();
@@ -112,7 +115,7 @@ $(function() {
   });
 
   $('#container .view#setupSteps .finishButton').click(function() {
-    PassMan.savePassword();
+    PassMan.savePortfolio();
     setActiveView('setupComplete');
   });
 
@@ -122,11 +125,11 @@ $(function() {
     clickCount++;
 
     if (clickCount === Config.NUM_STEPS_PER_LOGIN) {
-      if (PassMan.getIsValidLoginCombination(selectedCollectionIds, selectedItemIds)) {
+      PassMan.getIsValidLoginCombination(selectedCollectionIds, selectedItemIds).then(function(secret){
         setActiveView('loggedIn');
-      } else {
+      }, function(){
         setActiveView('loginFailed');
-      }
+      });
     } else {
       showLoginGallery(passwordCollectionIds[clickCount]);
     }
@@ -150,7 +153,7 @@ $(function() {
   });
 
   $('#container .view#forgotPassword .resetPasswordButton, #container .view#changePassword .resetPasswordButton').click(function() {
-    PassMan.removePassword();
+    PassMan.removePortfolio();
     prepareSetupSteps();
     setActiveView('setup');
   });

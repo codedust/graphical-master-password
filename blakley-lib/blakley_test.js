@@ -94,9 +94,8 @@ hashTuplesTest = [[ 1, new BigInteger('76169192223562682852264943880130673818260
                   [20, new BigInteger('16543633987400437488985127707496544361562099537157721836784124025082366733371')]];
 hashTuplesTest.map((e) => e[1] = e[1].mod(p));
 
-Mit = blakley.calcMit(Mtest[0].slice(0, 6), xTest, hashTuplesTest[0][1]).mod(p);
+Mit = blakley.calcMit(Mtest[0].slice(0, 6), xTest, hashTuplesTest[0][1], p).mod(p);
 test("calcMit", Mit.toString(), '307548322');
-
 
 // === simple gauss-jordan test ===
 var result = blakley.gauss([[new BigInteger(1), new BigInteger(2)],

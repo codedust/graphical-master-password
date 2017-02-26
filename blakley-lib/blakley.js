@@ -20,14 +20,15 @@ var blakley = (function() {
   var self = {};
   self.math = {};
 
-  numberOfGroups = 20;         // the number of image groups
+  numberOfGroups = 10;//20;         // the number of image groups
   numberOfImagesPerGroup = 16; // the number of images in each group
   portfolioSize = 10;          // the number of image groups chosen for the users
                                // portfolio
   authenticationRatio = 2/3;   // The proportion of the portfolio (rounded up) that
                                // has to be entered during each authentication attempt
 
-  authenticationSize = Math.ceil(portfolioSize * authenticationRatio);
+  // TODO: this should be configurable
+  authenticationSize = 5;//Math.ceil(portfolioSize * authenticationRatio);
 
   t = authenticationSize;
   n = portfolioSize;
@@ -257,7 +258,7 @@ var blakley = (function() {
   self.gauss = gauss;
 
   // the verification scheme
-  function calcMit(coefficients, x, yi) {
+  function calcMit(coefficients, x, yi, p) {
     var d = dot(coefficients, x.slice(0, -1)).mod(p);
     var r = reciprocal(x[x.length-1], p);
     return yi.subtract(d).mod(p).multiply(r).mod(p);
@@ -277,7 +278,8 @@ var blakley = (function() {
   }
 
   // construct the hash tuples from the portfolio
-  function constructHashTuples(passwordPortfolio, salt) {
+  function constructHashTuples(passwordPortfolio, salt, p) {
+    console.log('constructHashTuples');
     return new Promise(function(resolve, reject) {
       var hashTuples = new Array(passwordPortfolio.length);
       var hashPromises = [];
@@ -331,15 +333,15 @@ var blakley = (function() {
       }
       console.log("x", x.map((e) => e.toString()));
 
-      // the secret x[0] is now used to build a salted hash `s`
+      // the secret x[0] is now used to build a salted hash `hashed_secret`
       var buffer = bigIntegerToUint8Array(x[0].add(salt));
       crypto.subtle.digest("SHA-256", buffer).then(function(hash) {
-        var s = uint8ArrayToBigInteger(new Uint8Array(hash));
+        var hashed_secret = uint8ArrayToBigInteger(new Uint8Array(hash));
         console.log("secret", x[0].toString());
-        console.log("hash(secret)", s.toString());
+        console.log("hash(secret)", hashed_secret.toString());
 
         // construct the hash tuples
-        constructHashTuples(passwordPortfolio, salt).then(hashTuples => {
+        constructHashTuples(passwordPortfolio, salt, p).then(hashTuples => {
           var M = [];
           for(i = 0; i < n; i++) {
             // for each of the tuples, we choose t - 1 random coefficients
@@ -350,12 +352,12 @@ var blakley = (function() {
             M.push(randomValues);
 
             // the t'th entry is calculated using the calcMit method
-            M[i].push(calcMit(M[i], x, hashTuples[i][1]).mod(p));
+            M[i].push(calcMit(M[i], x, hashTuples[i][1], p).mod(p));
           }
 
           var groups = hashTuples.map((e) => e[0]);
 
-          var portfolio = {M, groups, s, salt, passwordPortfolio};
+          var portfolio = {M, groups, hashed_secret, salt, passwordPortfolio, p};
 
           resolve(portfolio);
         });
@@ -368,8 +370,9 @@ var blakley = (function() {
   //               Verification of the password
   // =========================================================
   function verify(userInput, portfolio) {
+    var p = portfolio.p;
     return new Promise(function(resolve, reject) {
-      constructHashTuples(userInput, portfolio.salt).then(verificationHashTuples => {
+      constructHashTuples(userInput, portfolio.salt, p).then(verificationHashTuples => {
         var Mveri = [];
         for (var i = 0; i < userInput.length; i++) {
           var index = portfolio.groups.indexOf(userInput[i][0]);
@@ -383,9 +386,9 @@ var blakley = (function() {
         var buffer = bigIntegerToUint8Array(xVeri[0].add(portfolio.salt));
         crypto.subtle.digest("SHA-256", buffer).then(function(hash) {
           var secretVeriHash = uint8ArrayToBigInteger(new Uint8Array(hash));
-          console.log("hash(secret)", portfolio.s.toString());
+          console.log("hash(secret)", portfolio.hashed_secret.toString());
           console.log("hash(secretVeriHash)", secretVeriHash.toString());
-          if (secretVeriHash.compare(portfolio.s) === 0) {
+          if (secretVeriHash.compare(portfolio.hashed_secret) === 0) {
             resolve(secretVeri);
           } else {
             reject("Wrong password");
