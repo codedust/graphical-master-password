@@ -75,6 +75,16 @@ xTest = [
   new BigInteger(245454470), new BigInteger(443488947),
   new BigInteger(387922063)];
 
+
+
+  var buffer = blakley.bigIntegerToUint8Array(new BigInteger("178000214").add(new BigInteger('2575939070979920166')));
+  var promise = crypto.subtle.digest("SHA-256", buffer).then(function (hash) {
+    console.log(blakley.uint8ArrayToBigInteger(new Uint8Array(hash)).toString());
+    console.log(p.toString());
+  });
+
+
+
 hashTuplesTest = [[ 1, new BigInteger('7616919222356268285226494388013067381826080614484526657789935791734028352602')],
                   [ 3, new BigInteger('33103877873694120367817780695228349719574260677948984461690793432147688971365')],
                   [ 5, new BigInteger('90656303662353035367995057797833935758783020210502605198248493414057069850769')],
@@ -106,3 +116,28 @@ test("xTest.length == 7", xTest.length, 7);
 for(var i = 0; i < xTest.length; i++) {
   test("xtest["+i+"]", xTest[i].compare(xExpect[i]), 0);
 }
+
+
+blakley.New().then(function(portfolio) {
+  // generating correct user input ;)
+  var userInput = blakley.randomSampleArray(portfolio.passwordPortfolio).slice(0, t);
+  portfolio.passwordPortfolio = null; // we must not store this
+  blakley.verify(userInput, portfolio).then(function(secret) {
+    test("verifyCorrectly", true, true);
+    console.log("secretVeri", secret.toString());
+  }, function(error) {
+    test("verifyCorrectly", false, true);
+  });
+});
+
+blakley.New().then(function(portfolio) {
+  // generating correct user input ;)
+  var userInput = blakley.randomSampleArray(portfolio.passwordPortfolio).slice(0, t);
+  portfolio.passwordPortfolio = null; // we must not store this
+  userInput[1][1]++;
+  blakley.verify(userInput, portfolio).then(function(secret) {
+    test("verifyInvalid", true, false);
+  }, function(error) {
+    test("verifyInvalid", false, false);
+  });
+});

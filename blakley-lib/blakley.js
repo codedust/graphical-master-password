@@ -313,6 +313,8 @@ var blakley = (function() {
   function New() {
     return new Promise(function(resolve, reject){
       // The parameter p is chosen according to section 5.2 in the paper
+
+      // TODO: use parameters here
       var p = new BigInteger(nextPrime(Math.pow(16, 7) * 2));
 
       // let's generate a random portfolio
@@ -333,7 +335,8 @@ var blakley = (function() {
       var buffer = bigIntegerToUint8Array(x[0].add(salt));
       crypto.subtle.digest("SHA-256", buffer).then(function(hash) {
         var s = uint8ArrayToBigInteger(new Uint8Array(hash));
-        console.log("secret", s.toString());
+        console.log("secret", x[0].toString());
+        console.log("hash(secret)", s.toString());
 
         // construct the hash tuples
         constructHashTuples(passwordPortfolio, salt).then(hashTuples => {
@@ -351,48 +354,47 @@ var blakley = (function() {
           }
 
           var groups = hashTuples.map((e) => e[0]);
-          console.log("groups", groups);
 
-          // TODO: remove passwordPortfolio (debug only)
-          var publicInformation = {M, groups, s, salt, passwordPortfolio};
-          //var publicInformation = {M, groups, s, salt};
+          var portfolio = {M, groups, s, salt, passwordPortfolio};
 
-          resolve(publicInformation);
+          resolve(portfolio);
         });
       });
     });
   }
   self.New = New;
 
+  // =========================================================
+  //               Verification of the password
+  // =========================================================
+  function verify(userInput, portfolio) {
+    return new Promise(function(resolve, reject) {
+      constructHashTuples(userInput, portfolio.salt).then(verificationHashTuples => {
+        var Mveri = [];
+        for (var i = 0; i < userInput.length; i++) {
+          var index = portfolio.groups.indexOf(userInput[i][0]);
+          Mveri.push(portfolio.M[index]);
+        }
 
-  New().then(function(publicInformation) {
-    // =========================================================
-    //               Verification of the password
-    // =========================================================
+        xVeri = gauss(Mveri, verificationHashTuples.map((e) => e[1]), p);
+        console.log("xVeri", xVeri.map((e) => e.toString()));
 
-    // TODO: remove passwordPortfolio (debug only)
-    var passwordPortfolio = publicInformation.passwordPortfolio;
-
-    // generating correct user input ;)
-    var userInput = randomSampleArray(passwordPortfolio).slice(0, t);
-    console.log("userInput", userInput.map(e => e[0]));
-
-    constructHashTuples(userInput, publicInformation.salt).then(verificationHashTuples => {
-      var Mveri = [];
-      for (var i = 0; i < userInput.length; i++) {
-        var index = publicInformation.groups.indexOf(userInput[i][0]);
-        Mveri.push(publicInformation.M[index]);
-      }
-
-      xVeri = gauss(Mveri, verificationHashTuples.map((e) => e[1]), p);
-      console.log("xVeri", xVeri.map((e) => e.toString()));
-
-      var buffer = bigIntegerToUint8Array(xVeri[0].add(publicInformation.salt));
-      crypto.subtle.digest("SHA-256", buffer).then(function(hash) {
-        console.log("secret", uint8ArrayToBigInteger(new Uint8Array(hash)).toString());
+        var secretVeri = xVeri[0];
+        var buffer = bigIntegerToUint8Array(xVeri[0].add(portfolio.salt));
+        crypto.subtle.digest("SHA-256", buffer).then(function(hash) {
+          var secretVeriHash = uint8ArrayToBigInteger(new Uint8Array(hash));
+          console.log("hash(secret)", portfolio.s.toString());
+          console.log("hash(secretVeriHash)", secretVeriHash.toString());
+          if (secretVeriHash.compare(portfolio.s) === 0) {
+            resolve(secretVeri);
+          } else {
+            reject("Wrong password");
+          }
+        });
       });
     });
-  });
+  }
+  self.verify = verify;
 
   return self;
 })();
