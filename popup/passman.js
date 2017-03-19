@@ -1,9 +1,6 @@
 /*jshint esversion: 6 */
 (function(){
-  var availableCollectionIds = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'];
-  var availableItemIds = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'];
-
-  var portfolio = getStoredPortfolio();
+  var portfolio = loadPortfolio();
 
   function shuffleArray(arr) {
     // Durstenfeld shuffle algorithm
@@ -25,66 +22,99 @@
 
       blakley.New().then(function(newPortfolio) {
         portfolio = newPortfolio;
-
-        portfolio.collectionIds = newPortfolio.groups;
-        portfolio.itemIds = newPortfolio.passwordPortfolio.map(e => e[1].toString());
         resolve(portfolio);
       });
     });
   }
 
   function portfolioInitialized() {
-    return (portfolio && portfolio.collectionIds && portfolio.collectionIds.length > 0);
+    return (portfolio && portfolio.groups && portfolio.groups.length > 0);
   }
 
-  // At this point, we have two arrays with password data:
+
+  // this function saves a portfolio to the browsers localStorage
   //
-  // - portfolio.collectionIds: This array contains the IDs of the galleries (ID = relative path name).
-  // - portfolio.itemIds: This array contains CORRESPONDING IDs that make up the password (ID = filename without extension)
-  //
-  // "Corresponding" means that the index of the gallery and the index of the item match. E.g., if image "5" from gallery "7"
-  // and image "6" of gallery "9" were assigned to the user as a password, these arrays would like this:
-  //
-  // - portfolio.collectionIds = ["7", "9"] (actual length == Config.NUM_STEPS_PER_LOGIN)
-  // - portfolio.itemIds = ["5", "6"] (actual length == Config.NUM_PASSWORD_PARTS)
-  //
-  // Please note that while currently all IDs are numbers, these might as well be strings. Adjust the following so that it saves
-  // the encrypted password information according to your needs. Currently, the password is saved in clear text.
+  // Since localStorage does not handle the prototype (object type) of BigInteger
+  // objects correctly, we have to store them as strings and convert them back
+  // when the data is read again.
+  // We also only store the data we need to retrieve the shared secret when
+  // the user enters a correct password
   function savePortfolio() {
     if (Config.NUM_STEPS_PER_LOGIN === 4 && Config.NUM_PASSWORD_PARTS === 10) {
-      savePortfolio1004(portfolio.collectionIds, portfolio.itemIds);
+      savePortfolio1004(
+        portfolio.passwordPortfolio.map(e => e[0]),
+        portfolio.passwordPortfolio.map(e => e[1]));
       return;
     }
 
-    // we don't store the password portfolio in cleartext
+    // we can now safely delete the plaintext information that we *must* not
+    // store
     portfolio.passwordPortfolio = null;
-    portfolio.itemIds = null;
 
-    localStorage.setItem('portfolio', JSON.stringify(portfolio));
+    // we have to convert BigIntegers to strings since localStorage is not
+    // capable of correctly handling the prototype (object type) of the objects
+    var sPortfolio = {};
+    var sM = [];
+    for (var i = 0; i < portfolio.M.length; i++) {
+      var coefficients = [];
+      for (var j = 0; j < portfolio.M[i].length; j++) {
+        coefficients.push(portfolio.M[i][j].toString());
+      }
+      sM.push(coefficients);
+    }
+    sPortfolio.M = sM;
+    sPortfolio.groups = portfolio.groups;
+    sPortfolio.hashed_secret = portfolio.hashed_secret.toString();
+    sPortfolio.salt = portfolio.salt.toString();
+    sPortfolio.p = portfolio.p.toString();
+
+    console.log("Saving portfolio to localStorage...");
+    localStorage.setItem('portfolio', JSON.stringify(sPortfolio));
   }
 
-  function removePortfolio() {
-    portfolio = {
-      collectionIds: [],
-      itemIds: []
-    };
+  // this function loades a portfolio from the browsers localStorage
+  function loadPortfolio() {
+    console.log("Loading portfolio from localStorage...");
+    var sPortfolio = JSON.parse(localStorage.getItem('portfolio')) || null;
+    if (sPortfolio === null) {
+      return null;
+    }
 
+    // convert the stored strings to BigIntegers
+    var portfolio = {};
+    var M = [];
+    for (var i = 0; i < sPortfolio.M.length; i++) {
+      var coefficients = [];
+      for (var j = 0; j < sPortfolio.M[i].length; j++) {
+        coefficients.push(new BigInteger(sPortfolio.M[i][j]));
+      }
+      M.push(coefficients);
+    }
+    portfolio.M = M;
+    portfolio.groups = sPortfolio.groups;
+    portfolio.hashed_secret = new BigInteger(sPortfolio.hashed_secret);
+    portfolio.salt = new BigInteger(sPortfolio.salt);
+    portfolio.p = new BigInteger(sPortfolio.p);
+
+    return portfolio;
+  }
+
+  // this function deletes the portfolio from the browsers localStorage
+  function removePortfolio() {
+    portfolio = null;
     localStorage.removeItem('portfolio');
   }
 
   function getRandomizedCollectionIds() {
-    var collectionIds = portfolio.collectionIds.slice();
+    var collectionIds = portfolio.groups.slice();
     shuffleArray(collectionIds);
     return collectionIds;
   }
 
   function getRandomizedCollectionItemIds(collectionId) {
-    // DEBUG/TEMPORARY
-    return availableItemIds;
-
-    // Right now all collections use the same item IDs. Thus, collectionId is ignored.
-    var itemIds = availableItemIds.slice();
-    shuffleArray(itemIds);
+    var itemIds = Array.apply(null, {length: Config.NUM_ITEMS_PER_COLLECTION}).map(Number.call, Number);
+    // TODO: DEBUG/TEMPORARY
+    //shuffleArray(itemIds);
     return itemIds;
   }
 
@@ -92,11 +122,10 @@
   //
   // The user has supplied the following data:
   //
-  // - collectionIds: This array contains the IDs of the galleries (ID = relative path name).
-  // - itemIds: This array contains CORRESPONDING IDs that make up the password (ID = filename without extension).
+  // - collectionIds: This array contains the IDs of the galleries (image groups).
+  // - itemIds: This array contains CORRESPONDING IDs that make up the password.
   //
-  // The collections are linked, e.g. itemIds[3] corresponds to collectionIds[3]. See comments in savePortfolio() for more details for the
-  // data stored inside the arrays.
+  // The collections are linked, e.g. itemIds[3] corresponds to collectionIds[3].
   function getIsValidLoginCombination(collectionIds, itemIds) {
     return new Promise(function(resolve, reject){
       if (!collectionIds || !itemIds || collectionIds.length != Config.NUM_STEPS_PER_LOGIN || itemIds.length != Config.NUM_STEPS_PER_LOGIN) {
@@ -132,10 +161,6 @@
     });
   }
 
-  function getStoredPortfolio() {
-    var portfolio = JSON.parse(localStorage.getItem('portfolio')) || null;
-    return portfolio;
-  }
 
   PassMan = {
     createPortfolio: createPortfolio,

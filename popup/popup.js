@@ -8,17 +8,6 @@ $(function() {
   var selectedItemIds;
 
   /* Helper Functions */
-
-  function prepareSetupSteps() {
-    clickCount = 0;
-    PassMan.createPortfolio().then(function(newPortfolio){
-      portfolio = newPortfolio;
-      console.log(portfolio);
-      propagateSetupClickCount();
-      showNextSetupImage();
-    });
-  }
-
   function prepareLogin() {
     clickCount = 0;
     passwordCollectionIds = PassMan.getRandomizedCollectionIds();
@@ -27,31 +16,15 @@ $(function() {
     showLoginGallery(passwordCollectionIds[0]);
   }
 
-  function showNextSetupImage() {
-    var collectionId = portfolio.collectionIds[clickCount];
-    var itemId = portfolio.itemIds[clickCount];
+  function showSetupImage(image) {
+    // update the click count
+    clickCount = image;
 
-    $('#container .view#setupSteps .passwordDisplay img').attr('src', Config.IMG_BASE_DIR + collectionId + '/' + itemId + Config.IMG_FULLSIZE_FILENAME_SUFFIX + Config.IMG_FILE_EXTENSION);
-  }
-
-  function showLoginGallery(collectionId) {
-    var itemIds = PassMan.getRandomizedCollectionItemIds(collectionId);
-
-    $('#container .view#login div.passwordGallery > div > img').each(function(index) {
-      if (index >= itemIds.length) {
-        return;
-      }
-
-      $(this).attr('src', Config.IMG_BASE_DIR + collectionId + '/' + itemIds[index] + Config.IMG_FILE_EXTENSION);
-      $(this).attr('data-collection', collectionId);
-      $(this).attr('data-item', itemIds[index]);
-    });
-  }
-
-  function propagateSetupClickCount() {
+    // update the text
     $('#container .view#setupSteps span.currentStep').text(clickCount + 1);
 
-    var nextButton = previousButton = $('#container .view#setupSteps > div > button.nextButton');
+    // update the buttons
+    var nextButton = $('#container .view#setupSteps > div > button.nextButton');
     var previousButton = $('#container .view#setupSteps > div > button.previousButton');
     var finishButton = $('#container .view#setupSteps > div > button.finishButton');
 
@@ -68,6 +41,29 @@ $(function() {
       nextButton.addClass('hidden');
       finishButton.removeClass('hidden');
     }
+
+    // update the image
+    var collectionId = portfolio.passwordPortfolio[clickCount][0];
+    var itemId = portfolio.passwordPortfolio[clickCount][1];
+    $('#container .view#setupSteps .passwordDisplay img').attr('src', Config.IMG_BASE_DIR + (collectionId + 1).toString() + '/' + (itemId + 1).toString() + Config.IMG_FULLSIZE_FILENAME_SUFFIX + Config.IMG_FILE_EXTENSION);
+  }
+
+  function showLoginGallery(collectionId) {
+    var itemIds = PassMan.getRandomizedCollectionItemIds(collectionId);
+
+    $('#container .view#login div.passwordGallery > div > img').each(function(index) {
+      if (index >= itemIds.length) {
+        return;
+      }
+
+      $(this).attr('src', Config.IMG_BASE_DIR + (collectionId + 1).toString() + '/' + (itemIds[index] + 1).toString() + Config.IMG_FILE_EXTENSION);
+      $(this).attr('data-collection', collectionId);
+      $(this).attr('data-item', itemIds[index]);
+    });
+  }
+
+  function propagateSetupClickCount() {
+
   }
 
   function setActiveView(viewId) {
@@ -81,7 +77,10 @@ $(function() {
   $('#container span.numPasswordParts').text(Config.NUM_PASSWORD_PARTS);
 
   if (!PassMan.portfolioInitialized()) {
-    setActiveView('setup');
+    PassMan.createPortfolio().then(function(newPortfolio){
+      portfolio = newPortfolio;
+      setActiveView('setup');
+    });
   } else {
     prepareLogin();
     setActiveView('login');
@@ -90,7 +89,7 @@ $(function() {
   /* Event Handling */
 
   $('#container .view#setup .startButton').click(function() {
-    prepareSetupSteps();
+    showSetupImage(0);
     setActiveView('setupSteps');
   });
 
@@ -99,9 +98,7 @@ $(function() {
   });
 
   $('#container .view#setupSteps .nextButton').click(function() {
-    clickCount++;
-    propagateSetupClickCount();
-    showNextSetupImage();
+    showSetupImage(clickCount + 1);
   });
 
   $('#container .view#setupSteps .previousButton').click(function() {
@@ -109,9 +106,7 @@ $(function() {
       return;
     }
 
-    clickCount--;
-    propagateSetupClickCount();
-    showNextSetupImage();
+    showSetupImage(clickCount - 1);
   });
 
   $('#container .view#setupSteps .finishButton').click(function() {
@@ -154,7 +149,9 @@ $(function() {
 
   $('#container .view#forgotPassword .resetPasswordButton, #container .view#changePassword .resetPasswordButton').click(function() {
     PassMan.removePortfolio();
-    prepareSetupSteps();
-    setActiveView('setup');
+    PassMan.createPortfolio().then(function(newPortfolio){
+      portfolio = newPortfolio;
+      setActiveView('setup');
+    });
   });
 });
