@@ -16,10 +16,6 @@
 
   function createPortfolio() {
     return new Promise(function(resolve, reject){
-      if (Config.NUM_STEPS_PER_LOGIN === 4 && Config.NUM_PASSWORD_PARTS === 10) {
-        resolve(createPortfolio());
-      }
-
       blakley.New().then(function(newPortfolio) {
         portfolio = newPortfolio;
         resolve(portfolio);
@@ -40,13 +36,6 @@
   // We also only store the data we need to retrieve the shared secret when
   // the user enters a correct password
   function savePortfolio() {
-    if (Config.NUM_STEPS_PER_LOGIN === 4 && Config.NUM_PASSWORD_PARTS === 10) {
-      savePortfolio1004(
-        portfolio.passwordPortfolio.map(e => e[0]),
-        portfolio.passwordPortfolio.map(e => e[1]));
-      return;
-    }
-
     // we can now safely delete the plaintext information that we *must* not
     // store
     portfolio.passwordPortfolio = null;
@@ -118,26 +107,17 @@
     return itemIds;
   }
 
-  // Checks whether the input supplied by the user matches a valid password variation.
+  // checks whether the input supplied by the user matches a valid password variation.
   //
-  // The user has supplied the following data:
+  // this function takes the following arguments:
+  // - collectionIds: this array contains the IDs of the galleries (image groups).
+  // - itemIds: this array contains CORRESPONDING IDs that make up the password.
   //
-  // - collectionIds: This array contains the IDs of the galleries (image groups).
-  // - itemIds: This array contains CORRESPONDING IDs that make up the password.
-  //
-  // The collections are linked, e.g. itemIds[3] corresponds to collectionIds[3].
+  // the collections are "linked", e.g. itemIds[3] corresponds to collectionIds[3]
   function getIsValidLoginCombination(collectionIds, itemIds) {
     return new Promise(function(resolve, reject){
       if (!collectionIds || !itemIds || collectionIds.length != Config.NUM_STEPS_PER_LOGIN || itemIds.length != Config.NUM_STEPS_PER_LOGIN) {
         reject();
-      }
-
-      if (Config.NUM_STEPS_PER_LOGIN === 4 && Config.NUM_PASSWORD_PARTS === 10) {
-        if (getIsValidLoginCombination1004(collectionIds, itemIds)) {
-          resolve();
-        } else {
-          reject();
-        }
       }
 
       var userInput = [];
