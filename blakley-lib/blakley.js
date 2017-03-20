@@ -20,8 +20,7 @@ var blakley = (function() {
   var self = {};
   self.math = {};
 
-  // TODO: adjust numbers
-  numberOfGroups = 10;//19;         // the number of image groups
+  numberOfGroups = 19;         // the number of image groups
   numberOfImagesPerGroup = 16; // the number of images in each group
   portfolioSize = 10;          // the number of image groups chosen for the users
                                // portfolio
@@ -275,7 +274,7 @@ var blakley = (function() {
     // the portfolio consists of a subset of the groups and a randomly choosen
     // image per group
     portfolio = groups.slice(0, portfolioSize).map(
-      e => [e, getRandomInt(0, numberOfImagesPerGroup - 1)]);
+      e => [e, getRandomInt(0, numberOfImagesPerGroup - 1).toJSValue()]);
     return portfolio;
   }
 

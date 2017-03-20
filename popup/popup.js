@@ -2,18 +2,15 @@ $(function() {
   /* Misc Variables */
 
   var clickCount;
-  var portfolio;
-  var passwordCollectionIds;
-  var selectedCollectionIds;
-  var selectedItemIds;
+  var plaintextPortfolio;
+  var portfolioGroups;
+  var userInput;
 
   /* Helper Functions */
   function prepareLogin() {
     clickCount = 0;
-    passwordCollectionIds = PassMan.getRandomizedCollectionIds();
-    selectedCollectionIds = [];
-    selectedItemIds = [];
-    showLoginGallery(passwordCollectionIds[0]);
+    userInput = [];
+    showLoginGallery(portfolioGroups[0]);
   }
 
   function showSetupImage(image) {
@@ -43,13 +40,13 @@ $(function() {
     }
 
     // update the image
-    var collectionId = portfolio.passwordPortfolio[clickCount][0];
-    var itemId = portfolio.passwordPortfolio[clickCount][1];
+    var collectionId = plaintextPortfolio[clickCount][0];
+    var itemId = plaintextPortfolio[clickCount][1];
     $('#container .view#setupSteps .passwordDisplay img').attr('src', Config.IMG_BASE_DIR + (collectionId + 1).toString() + '/' + (itemId + 1).toString() + Config.IMG_FULLSIZE_FILENAME_SUFFIX + Config.IMG_FILE_EXTENSION);
   }
 
   function showLoginGallery(collectionId) {
-    var itemIds = PassMan.getRandomizedCollectionItemIds(collectionId);
+    var itemIds = Array.apply(null, {length: Config.NUM_ITEMS_PER_COLLECTION}).map(Number.call, Number);
 
     $('#container .view#login div.passwordGallery > div > img').each(function(index) {
       if (index >= itemIds.length) {
@@ -62,10 +59,6 @@ $(function() {
     });
   }
 
-  function propagateSetupClickCount() {
-
-  }
-
   function setActiveView(viewId) {
     $('.view').removeClass('active');
     $('.view#' + viewId).addClass('active');
@@ -76,15 +69,44 @@ $(function() {
   $('#container span.numStepsPerLogin').text(Config.NUM_STEPS_PER_LOGIN);
   $('#container span.numPasswordParts').text(Config.NUM_PASSWORD_PARTS);
 
-  if (!PassMan.portfolioInitialized()) {
-    PassMan.createPortfolio().then(function(newPortfolio){
-      portfolio = newPortfolio;
-      setActiveView('setup');
-    });
-  } else {
-    prepareLogin();
-    setActiveView('login');
-  }
+  browser.runtime.sendMessage({"action": "requestPortfolioStatus"});
+
+  browser.runtime.onMessage.addListener(function(message) {
+    console.log("<-", message);
+    switch (message.action) {
+      case "portfolioStatus":
+        switch (message.status) {
+          case "setup":
+            plaintextPortfolio = message.data;
+            portfolioGroups = null;
+            setActiveView('setup');
+            break;
+          case "login":
+            plaintextPortfolio = null;
+            portfolioGroups = message.data;
+            prepareLogin();
+            setActiveView('login');
+            break;
+          default:
+            console.log("Unknown portfolio state:", message);
+        }
+        break;
+      case "setupSuccessful":
+        setActiveView('setupComplete');
+        plaintextPortfolio = null;
+        portfolioGroups = message.data;
+        break;
+      case "loginSuccessful":
+        setActiveView('loggedIn');
+        break;
+      case "loginFailed":
+        setActiveView('loginFailed');
+        break;
+      default:
+        console.log("Unknown message action:", message);
+    }
+  });
+
 
   /* Event Handling */
 
@@ -110,23 +132,23 @@ $(function() {
   });
 
   $('#container .view#setupSteps .finishButton').click(function() {
-    PassMan.savePortfolio();
-    setActiveView('setupComplete');
+    browser.runtime.sendMessage({"action": "savePortfolio"});
   });
 
   $('#container .view#login > div.passwordGallery > div > img').click(function() {
-    selectedCollectionIds.push($(this).attr('data-collection'));
-    selectedItemIds.push($(this).attr('data-item'));
+    userInput.push([
+      parseInt($(this).attr('data-collection')),
+      parseInt($(this).attr('data-item'))
+    ]);
     clickCount++;
 
     if (clickCount === Config.NUM_STEPS_PER_LOGIN) {
-      PassMan.getIsValidLoginCombination(selectedCollectionIds, selectedItemIds).then(function(secret){
-        setActiveView('loggedIn');
-      }, function(){
-        setActiveView('loginFailed');
+      browser.runtime.sendMessage({
+        "action": "validatePlaintextPortfolio",
+        "data": userInput
       });
     } else {
-      showLoginGallery(passwordCollectionIds[clickCount]);
+      showLoginGallery(portfolioGroups[clickCount]);
     }
   });
 
@@ -148,10 +170,6 @@ $(function() {
   });
 
   $('#container .view#forgotPassword .resetPasswordButton, #container .view#changePassword .resetPasswordButton').click(function() {
-    PassMan.removePortfolio();
-    PassMan.createPortfolio().then(function(newPortfolio){
-      portfolio = newPortfolio;
-      setActiveView('setup');
-    });
+    browser.runtime.sendMessage({"action": "resetPortfolio"});
   });
 });

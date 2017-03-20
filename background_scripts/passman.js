@@ -100,13 +100,6 @@
     return collectionIds;
   }
 
-  function getRandomizedCollectionItemIds(collectionId) {
-    var itemIds = Array.apply(null, {length: Config.NUM_ITEMS_PER_COLLECTION}).map(Number.call, Number);
-    // TODO: DEBUG/TEMPORARY
-    //shuffleArray(itemIds);
-    return itemIds;
-  }
-
   // checks whether the input supplied by the user matches a valid password variation.
   //
   // this function takes the following arguments:
@@ -114,18 +107,11 @@
   // - itemIds: this array contains CORRESPONDING IDs that make up the password.
   //
   // the collections are "linked", e.g. itemIds[3] corresponds to collectionIds[3]
-  function getIsValidLoginCombination(collectionIds, itemIds) {
+  function validateUserInput(userInput) {
     return new Promise(function(resolve, reject){
-      if (!collectionIds || !itemIds || collectionIds.length != Config.NUM_STEPS_PER_LOGIN || itemIds.length != Config.NUM_STEPS_PER_LOGIN) {
+      if (!userInput || userInput.length != Config.NUM_STEPS_PER_LOGIN) {
         reject();
       }
-
-      var userInput = [];
-      for (var i = 0; i < collectionIds.length; i++) {
-        userInput.push([collectionIds[i], itemIds[i]]);
-      }
-      userInput = userInput.map(
-        e => [parseInt(e[0].toString()), parseInt(e[1].toString())]);
 
       if (portfolio.passwordPortfolio) {
         console.log("WARNING: plaintext passwordPortfolio is still stored in the portfolio");
@@ -148,7 +134,6 @@
     savePortfolio: savePortfolio,
     removePortfolio: removePortfolio,
     getRandomizedCollectionIds: getRandomizedCollectionIds,
-    getRandomizedCollectionItemIds: getRandomizedCollectionItemIds,
-    getIsValidLoginCombination: getIsValidLoginCombination
+    validateUserInput: validateUserInput
   };
 })();
