@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 (function(){
   var portfolio = loadPortfolio();
+  var secret = null;
 
   function shuffleArray(arr) {
     // Durstenfeld shuffle algorithm
@@ -18,13 +19,31 @@
     return new Promise(function(resolve, reject){
       blakley.New().then(function(newPortfolio) {
         portfolio = newPortfolio;
+        portfolio.setupComplete = false;
+        secret = null;
         resolve(portfolio);
       });
     });
   }
 
+  function getPortfolio() {
+    if (!portfolioInitialized() || setupComplete()) {
+      return null;
+    } else {
+      return portfolio;
+    }
+  }
+
   function portfolioInitialized() {
     return (portfolio && portfolio.groups && portfolio.groups.length > 0);
+  }
+
+  function setupComplete() {
+    return (portfolioInitialized() && portfolio.setupComplete);
+  }
+
+  function loginSuccessful() {
+    return setupComplete() && secret !== null;
   }
 
 
@@ -36,6 +55,9 @@
   // We also only store the data we need to retrieve the shared secret when
   // the user enters a correct password
   function savePortfolio() {
+    // the user has seen the portfolio images (we never store plaintext data!)
+    portfolio.setupComplete = true;
+
     // we can now safely delete the plaintext information that we *must* not
     // store
     portfolio.passwordPortfolio = null;
@@ -84,6 +106,7 @@
     portfolio.hashed_secret = new BigInteger(sPortfolio.hashed_secret);
     portfolio.salt = new BigInteger(sPortfolio.salt);
     portfolio.p = new BigInteger(sPortfolio.p);
+    portfolio.setupComplete = true; // we never store plaintext data!
 
     return portfolio;
   }
@@ -117,7 +140,8 @@
         console.log("WARNING: plaintext passwordPortfolio is still stored in the portfolio");
       }
 
-      blakley.verify(userInput, portfolio).then(function(secret) {
+      blakley.verify(userInput, portfolio).then(function(blakley_secret) {
+        secret = blakley_secret;
         console.log("verified correctly", secret.toString());
         resolve(secret);
       }, function() {
@@ -130,7 +154,10 @@
 
   PassMan = {
     createPortfolio: createPortfolio,
+    getPortfolio: getPortfolio,
     portfolioInitialized: portfolioInitialized,
+    setupComplete: setupComplete,
+    loginSuccessful: loginSuccessful,
     savePortfolio: savePortfolio,
     removePortfolio: removePortfolio,
     getRandomizedCollectionIds: getRandomizedCollectionIds,

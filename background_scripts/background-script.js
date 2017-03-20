@@ -1,6 +1,3 @@
-var setupComplete = false;
-var passwordPortfolio;
-
 browser.runtime.onMessage.addListener(function(message) {
   console.log("->", message);
   switch (message.action) {
@@ -9,41 +6,31 @@ browser.runtime.onMessage.addListener(function(message) {
         console.log("not init");
         // portfolio has not been created yet
         PassMan.createPortfolio().then(function(portfolio){
-          passwordPortfolio = portfolio.passwordPortfolio;
           browser.tabs.sendMessage(0, {
             "action": "portfolioStatus",
             "status": "setup",
-            "data": passwordPortfolio
+            "data": portfolio.passwordPortfolio
           });
         });
-      } else if (!setupComplete) {
+      } else if (!PassMan.setupComplete()) {
         // portfolio has been created but images have not been shown to the user
         // yet
-        if (!passwordPortfolio) {
-          // the passwordPortfolio may not be present if the browser creshed
-          // during setup
-          PassMan.createPortfolio().then(function(portfolio){
-            passwordPortfolio = portfolio.passwordPortfolio;
-            browser.tabs.sendMessage(0, {
-              "action": "portfolioStatus",
-              "status": "setup",
-              "data": passwordPortfolio
-            });
-          });
-        } else {
-          browser.tabs.sendMessage(0, {
-            "action": "portfolioStatus",
-            "status": "setup",
-            "data": passwordPortfolio
-          });
-        }
-      } else {
+        console.log("setupfuckup", PassMan.getPortfolio());
+        browser.tabs.sendMessage(0, {
+          "action": "portfolioStatus",
+          "status": "setup",
+          "data": PassMan.getPortfolio().passwordPortfolio
+        });
+      } else if (!PassMan.loginSuccessful()) {
         // portfolio setup is completed. Proceed with login.
         browser.tabs.sendMessage(0, {
           "action": "portfolioStatus",
           "status": "login",
           "data": PassMan.getRandomizedCollectionIds()
         });
+      } else {
+        // user is logged in
+        browser.tabs.sendMessage(0, { "action": "loginSuccessful" });
       }
       break;
     case "validatePlaintextPortfolio":
@@ -56,9 +43,6 @@ browser.runtime.onMessage.addListener(function(message) {
       break;
     case "savePortfolio":
       // setup is now complete
-      setupComplete = true;
-      passwordPortfolio = null;
-
       PassMan.savePortfolio();
       browser.tabs.sendMessage(0, {
         "action": "setupSuccessful",
@@ -69,8 +53,6 @@ browser.runtime.onMessage.addListener(function(message) {
       // let's reset the portfolio
       PassMan.removePortfolio();
       PassMan.createPortfolio().then(function(portfolio){
-        setupComplete = false;
-        passwordPortfolio = portfolio.passwordPortfolio;
         browser.tabs.sendMessage(0, {
           "action": "portfolioStatus",
           "status": "setup",
