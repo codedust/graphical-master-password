@@ -146,7 +146,7 @@ var blakley = (function() {
 
   // converts an Uint8Array to a BigInteger
   function uint8ArrayToBigInteger(array) {
-    return new BigInteger(array.reduce((a, b) => a + b.toString(16), "0x"));
+    return new BigInteger(array.reduce((a, b) => a + ((b < 16)?'0':'') + b.toString(16), "0x"));
   }
   self.uint8ArrayToBigInteger = uint8ArrayToBigInteger;
 
@@ -241,7 +241,7 @@ var blakley = (function() {
           maxValue = mat[i][j];
         }
       }
-      if (!maxValue.isZero()) {
+      if (!(new BigInteger(maxValue).isZero())) {
         multiplyRow(maxRow, reciprocal(maxValue, p));
         swapRows(maxRow, pivot);
 
@@ -373,10 +373,10 @@ var blakley = (function() {
         var Mveri = [];
         for (var i = 0; i < userInput.length; i++) {
           var index = portfolio.groups.indexOf(userInput[i][0]);
-          Mveri.push(portfolio.M[index]);
+          Mveri.push(portfolio.M[index].slice());
         }
 
-        xVeri = gauss(Mveri, verificationHashTuples.map((e) => e[1]), portfolio.p);
+        var xVeri = gauss(Mveri, verificationHashTuples.map((e) => e[1]), portfolio.p);
 
         var secretVeri = xVeri[0];
         var buffer = bigIntegerToUint8Array(xVeri[0].add(portfolio.salt));
