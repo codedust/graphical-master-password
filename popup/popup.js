@@ -92,11 +92,13 @@ $(function() {
         }
         break;
       case "setupSuccessful":
-        setActiveView('setupComplete');
         plaintextPortfolio = null;
         portfolioGroups = message.data;
+        setActiveView('setupComplete');
         break;
       case "loginSuccessful":
+        plaintextPortfolio = null;
+        portfolioGroups = message.data;
         setActiveView('loggedIn');
         break;
       case "loginFailed":
@@ -153,7 +155,9 @@ $(function() {
   });
 
   $('#container .view#setupComplete .loginButton, #container .view#loginFailed .loginButton, #container .view#forgotPassword .okButton, #container .view#loggedIn .logoutButton').click(function() {
+    browser.runtime.sendMessage({"action": "logout"});
     prepareLogin();
+    console.log(portfolioGroups);
     setActiveView('login');
   });
 

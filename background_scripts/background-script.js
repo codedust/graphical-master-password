@@ -15,7 +15,6 @@ browser.runtime.onMessage.addListener(function(message) {
       } else if (!PassMan.setupComplete()) {
         // portfolio has been created but images have not been shown to the user
         // yet
-        console.log("setupfuckup", PassMan.getPortfolio());
         browser.tabs.sendMessage(0, {
           "action": "portfolioStatus",
           "status": "setup",
@@ -30,16 +29,26 @@ browser.runtime.onMessage.addListener(function(message) {
         });
       } else {
         // user is logged in
-        browser.tabs.sendMessage(0, { "action": "loginSuccessful" });
+        browser.tabs.sendMessage(0, {
+          "action": "loginSuccessful",
+          "data": PassMan.getRandomizedCollectionIds()
+        });
       }
       break;
     case "validatePlaintextPortfolio":
       // let's validate the user input
       PassMan.validateUserInput(message.data).then(function(secret){
-        browser.tabs.sendMessage(0, { "action": "loginSuccessful" });
+        browser.tabs.sendMessage(0, {
+          "action": "loginSuccessful",
+          "data": PassMan.getRandomizedCollectionIds()
+        });
+        PassMan.decryptPasswords();
       }, function(){
         browser.tabs.sendMessage(0, { "action": "loginFailed" });
       });
+      break;
+    case "logout":
+      PassMan.logout();
       break;
     case "savePortfolio":
       // setup is now complete

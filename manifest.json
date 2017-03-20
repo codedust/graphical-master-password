@@ -9,9 +9,7 @@
     "48": "icons/icon-48.png"
   },
 
-  "permissions": [
-    "activeTab"
-  ],
+  "permissions": ["experiments.logins", "logins", "<all_urls>"],
 
   "background": {
     "scripts": [
