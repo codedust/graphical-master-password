@@ -11,14 +11,14 @@
 			<h1>Setup Required</h1>
 			<div>
 				<p>You have not set up a graphical password yet.</p>
-				<p>Once you are ready, a sequence of <span class="numPasswordParts"></span> images will be presented to you. These images will make up your graphical password. Memorize them well!</p>
+				<p>Once you are ready, a sequence of <span class="numImageGroups"></span> images will be presented to you. These images will make up your graphical password. Memorize them well!</p>
 			</div>
 			<div>
 				<button class="startButton">I'm ready</button>
 			</div>
 		</div>
 		<div class="view" id="setupSteps">
-			<h1>Setup (Step <span class="currentStep"></span> of <span class="numPasswordParts"></span>)</h1>
+			<h1>Setup (Step <span class="currentStep"></span> of <span class="numImageGroups"></span>)</h1>
 			<div class="passwordDisplay">
 				<img />
 			</div>
@@ -61,7 +61,7 @@
 		<div class="view" id="loginFailed">
 			<h1>Login Failed</h1>
 			<div>
-				<p>Oh no! You must have screwed up somewhere.</p>
+				<p>Oh no! You must have been wrong somewhere.</p>
 			</div>
 			<div>
 				<button class="loginButton">Try Again</button>
@@ -70,7 +70,8 @@
 		<div class="view" id="loggedIn">
 			<h1>Logged In</h1>
 			<div>
-				<p>You know what's great? You're logged in!</p>
+				<p>You've been successfully logged in!</p>
+				<p>Firefox is now able to access your passwords stored in the password manager.</p>
 			</div>
 			<div>
 				<button class="changePasswordButton">Change Password</button>
@@ -78,25 +79,45 @@
 			</div>
 		</div>
 		<div class="view" id="forgotPassword">
-			<h1>Password Forgotten</h1>
+			<h1>Reset Password</h1>
 			<div>
-				<p>Now, that really is unfortunate for you...</p>
+				<p>Warning! All saved passwords will be lost if you reset your graphical master password!</p>
 			</div>
 			<div>
-				<button class="warn resetPasswordButton">Debug: Reset Password</button>
+				<button class="warn resetPasswordButton">I know about the consequences.<br>Reset my Password</button>
 			</div>
 			<div>
-				<button class="okButton">OK</button>
+				<button class="okButton">Cancel</button>
 			</div>
 		</div>
 		<div class="view" id="changePassword">
-			<h1>Change Password</h1>
+			<h1>Change password</h1>
 			<div>
-				<p>What has been seen cannot be unseen...</p>
+				<p>Please choose the image gallery you would like to replace.</p>
+				<div class="passwordGallery">
+					<div>
+						<img /><img /><img /><img />
+					</div>
+					<div>
+						<img /><img /><img /><img />
+					</div>
+					<div>
+						<img /><img /><img /><img />
+					</div>
+					<div>
+						<img /><img /><img /><img />
+					</div>
+				</div>
+				<div class="passwordDisplay">
+					<img />
+				</div>
+				<p>Gallery <span class="currentStep"></span> of <span class="numImageGroups"></span></p>
 			</div>
 			<div>
-				<button class="resetPasswordButton">Debug: Reset Password</button>
-				<button class="warn cancelButton">Cancel</button>
+				<button class="warn resetImageGroupButton">Replace this immage gallery</button>
+				<button class="nextButton">Next</button>
+				<button class="hidden secondary previousButton">Previous</button>
+				<button class="hidden highlight finishButton">Done</button>
 			</div>
 		</div>
 	</div>

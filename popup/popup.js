@@ -31,7 +31,7 @@ $(function() {
       previousButton.removeClass('hidden');
     }
 
-    if (clickCount + 1 < Config.NUM_PASSWORD_PARTS) {
+    if (clickCount + 1 < Config.NUM_IMAGE_GROUPS) {
       nextButton.removeClass('hidden');
       finishButton.addClass('hidden');
     } else {
@@ -46,7 +46,7 @@ $(function() {
   }
 
   function showLoginGallery(collectionId) {
-    var itemIds = Array.apply(null, {length: Config.NUM_ITEMS_PER_COLLECTION}).map(Number.call, Number);
+    var itemIds = Array.apply(null, {length: Config.NUM_IMAGES_PER_GROUP}).map(Number.call, Number);
 
     $('#container .view#login div.passwordGallery > div > img').each(function(index) {
       if (index >= itemIds.length) {
@@ -67,7 +67,7 @@ $(function() {
   /* Initialization */
 
   $('#container span.numStepsPerLogin').text(Config.NUM_STEPS_PER_LOGIN);
-  $('#container span.numPasswordParts').text(Config.NUM_PASSWORD_PARTS);
+  $('#container span.numImageGroups').text(Config.NUM_IMAGE_GROUPS);
 
   browser.runtime.sendMessage({"action": "requestPortfolioStatus"});
 
