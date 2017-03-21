@@ -29,6 +29,19 @@ $(function() {
       finishButton.removeClass('hidden');
     }
 
+    if (clickCount >= Config.NUM_IMAGE_GROUPS_PER_PORTFOLIO - 1) {
+      $('#container .view#setupSteps .nextButton').addClass('secondary');
+    } else {
+      $('#container .view#setupSteps .nextButton').removeClass('secondary');
+    }
+
+
+    if (clickCount <= 1) {
+      $('#container .view#setupSteps .previousButton').addClass('secondary');
+    } else {
+      $('#container .view#setupSteps .previousButton').removeClass('secondary');
+    }
+
     // update the image
     var groupId = plaintextPortfolio[clickCount][0];
     var itemId = plaintextPortfolio[clickCount][1];
@@ -125,6 +138,7 @@ $(function() {
         break;
       case "setupSuccessful":
         portfolioGroups = message.data;
+        plaintextPortfolio = null;
         setActiveView('setupComplete');
         break;
       case "loginFailed":
@@ -205,8 +219,6 @@ $(function() {
   // === setupComplete ===
 
   $('#container .view#setupComplete .loginButton').click(function() {
-    portfolioGroups = plaintextPortfolio.map(e => e[0]);
-    plaintextPortfolio = null;
     prepareLogin();
     setActiveView('login');
   });
