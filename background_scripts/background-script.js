@@ -48,7 +48,13 @@ browser.runtime.onMessage.addListener(function(message) {
       });
       break;
     case "logout":
-      PassMan.logout();
+      PassMan.logout().then(() => {
+        browser.tabs.sendMessage(0, {
+          "action": "portfolioStatus",
+          "status": "login",
+          "data": PassMan.getRandomizedCollectionIds()
+        });
+      });
       break;
     case "savePortfolio":
       // setup is now complete

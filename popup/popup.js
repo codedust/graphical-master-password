@@ -120,6 +120,8 @@ $(function() {
             break;
           case "login":
             portfolioGroups = message.data;
+            plaintextPortfolio = null;
+            console.log("login", message.data);
             prepareLogin();
             setActiveView('login');
             break;
@@ -210,10 +212,6 @@ $(function() {
 
   $('#container .view#loggedIn .logoutButton').click(function() {
     browser.runtime.sendMessage({"action": "logout"});
-    portfolioGroups = plaintextPortfolio.map(e => e[0]);
-    plaintextPortfolio = null;
-    prepareLogin();
-    setActiveView('login');
   });
 
   // === setupComplete ===

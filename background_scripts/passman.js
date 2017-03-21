@@ -232,10 +232,13 @@
 
   // encrypts all passwords and deletes the secret
   function logout() {
-    encryptPasswords().then(function() {
-      console.log('setting secret to null');
-      self.secret = null;
-      self.plaintextPortfolio = null;
+    return new Promise(function(resolve, reject) {
+      encryptPasswords().then(function() {
+        console.log('setting secret to null');
+        self.secret = null;
+        self.plaintextPortfolio = null;
+        resolve();
+      });
     });
   }
 
