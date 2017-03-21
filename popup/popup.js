@@ -46,16 +46,14 @@ $(function() {
   }
 
   function showLoginGallery(groupId) {
-    var itemIds = Array.apply(null, {length: Config.NUM_IMAGES_PER_GROUP}).map(Number.call, Number);
-
     $('#container .view#login div.passwordGallery > div > img').each(function(index) {
-      if (index >= itemIds.length) {
+      if (index >= Config.NUM_IMAGES_PER_GROUP) {
         return;
       }
 
-      $(this).attr('src', Config.IMG_BASE_DIR + (groupId + 1).toString() + '/' + (itemIds[index] + 1).toString() + Config.IMG_FILE_EXTENSION);
+      $(this).attr('src', Config.IMG_BASE_DIR + (groupId + 1).toString() + '/' + (index + 1).toString() + Config.IMG_FILE_EXTENSION);
       $(this).attr('data-collection', groupId);
-      $(this).attr('data-item', itemIds[index]);
+      $(this).attr('data-item', index);
     });
   }
 
