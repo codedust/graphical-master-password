@@ -9,7 +9,7 @@ browser.runtime.onMessage.addListener(function(message) {
           browser.tabs.sendMessage(0, {
             "action": "portfolioStatus",
             "status": "setup",
-            "data": portfolio.passwordPortfolio
+            "data": portfolio.plaintextPortfolio
           });
         });
       } else if (!PassMan.setupComplete()) {
@@ -18,7 +18,7 @@ browser.runtime.onMessage.addListener(function(message) {
         browser.tabs.sendMessage(0, {
           "action": "portfolioStatus",
           "status": "setup",
-          "data": PassMan.getPortfolio().passwordPortfolio
+          "data": PassMan.getPortfolio().plaintextPortfolio
         });
       } else if (!PassMan.loginSuccessful()) {
         // portfolio setup is completed. Proceed with login.
@@ -65,7 +65,7 @@ browser.runtime.onMessage.addListener(function(message) {
         browser.tabs.sendMessage(0, {
           "action": "portfolioStatus",
           "status": "setup",
-          "data": portfolio.passwordPortfolio
+          "data": portfolio.plaintextPortfolio
         });
       });
       break;

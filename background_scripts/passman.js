@@ -1,8 +1,8 @@
 /*jshint esversion: 6 */
 (function(){
-  var portfolio = loadPortfolio();
   var self = {};
   self.secret = null;
+  self.portfolio = loadPortfolio();
 
   function shuffleArray(arr) {
     // Durstenfeld shuffle algorithm
@@ -18,12 +18,15 @@
 
   function createPortfolio() {
     return new Promise(function(resolve, reject){
-      blakley.New().then(function(newPortfolio) {
+      // let's generate a random portfolio
+      var plaintextPortfolio = blakley.generateRandomPortfolio(numberOfGroups, numberOfImagesPerGroup, portfolioSize);
+
+      blakley.New(plaintextPortfolio).then(function(newPortfolio) {
         console.log(newPortfolio);
-        portfolio = newPortfolio;
-        portfolio.setupComplete = false;
+        self.portfolio = newPortfolio;
+        self.portfolio.setupComplete = false;
         self.secret = null;
-        resolve(portfolio);
+        resolve(self.portfolio);
       });
     });
   }
@@ -32,16 +35,16 @@
     if (!portfolioInitialized() || setupComplete()) {
       return null;
     } else {
-      return portfolio;
+      return self.portfolio;
     }
   }
 
   function portfolioInitialized() {
-    return (portfolio && portfolio.groups && portfolio.groups.length > 0);
+    return (self.portfolio && self.portfolio.groups && self.portfolio.groups.length > 0);
   }
 
   function setupComplete() {
-    return (portfolioInitialized() && portfolio.setupComplete);
+    return (portfolioInitialized() && self.portfolio.setupComplete);
   }
 
   function loginSuccessful() {
@@ -194,28 +197,28 @@
   // the user enters a correct password
   function savePortfolio() {
     // the user has seen the portfolio images (we never store plaintext data!)
-    portfolio.setupComplete = true;
+    self.portfolio.setupComplete = true;
 
     // we can now safely delete the plaintext information that we *must* not
     // store
-    portfolio.passwordPortfolio = null;
+    self.portfolio.plaintextPortfolio = null;
 
     // we have to convert BigIntegers to strings since localStorage is not
     // capable of correctly handling the prototype (object type) of the objects
     var sPortfolio = {};
     var sM = [];
-    for (var i = 0; i < portfolio.M.length; i++) {
+    for (var i = 0; i < self.portfolio.M.length; i++) {
       var coefficients = [];
-      for (var j = 0; j < portfolio.M[i].length; j++) {
-        coefficients.push(portfolio.M[i][j].toString());
+      for (var j = 0; j < self.portfolio.M[i].length; j++) {
+        coefficients.push(self.portfolio.M[i][j].toString());
       }
       sM.push(coefficients);
     }
     sPortfolio.M = sM;
-    sPortfolio.groups = portfolio.groups;
-    sPortfolio.hashed_secret = portfolio.hashed_secret.toString();
-    sPortfolio.salt = portfolio.salt.toString();
-    sPortfolio.p = portfolio.p.toString();
+    sPortfolio.groups = self.portfolio.groups;
+    sPortfolio.hashed_secret = self.portfolio.hashed_secret.toString();
+    sPortfolio.salt = self.portfolio.salt.toString();
+    sPortfolio.p = self.portfolio.p.toString();
 
     console.log("Saving portfolio to localStorage...");
     localStorage.setItem('portfolio', JSON.stringify(sPortfolio));
@@ -230,7 +233,7 @@
     }
 
     // convert the stored strings to BigIntegers
-    var portfolio = {};
+    self.portfolio = {};
     var M = [];
     for (var i = 0; i < sPortfolio.M.length; i++) {
       var coefficients = [];
@@ -239,24 +242,24 @@
       }
       M.push(coefficients);
     }
-    portfolio.M = M;
-    portfolio.groups = sPortfolio.groups;
-    portfolio.hashed_secret = new BigInteger(sPortfolio.hashed_secret);
-    portfolio.salt = new BigInteger(sPortfolio.salt);
-    portfolio.p = new BigInteger(sPortfolio.p);
-    portfolio.setupComplete = true; // we never store plaintext data!
+    self.portfolio.M = M;
+    self.portfolio.groups = sPortfolio.groups;
+    self.portfolio.hashed_secret = new BigInteger(sPortfolio.hashed_secret);
+    self.portfolio.salt = new BigInteger(sPortfolio.salt);
+    self.portfolio.p = new BigInteger(sPortfolio.p);
+    self.portfolio.setupComplete = true; // we never store plaintext data!
 
-    return portfolio;
+    return self.portfolio;
   }
 
   // this function deletes the portfolio from the browsers localStorage
   function removePortfolio() {
-    portfolio = null;
+    self.portfolio = null;
     localStorage.removeItem('portfolio');
   }
 
   function getRandomizedCollectionIds() {
-    var collectionIds = portfolio.groups.slice();
+    var collectionIds = self.portfolio.groups.slice();
     shuffleArray(collectionIds);
     return collectionIds;
   }
@@ -275,11 +278,11 @@
         reject();
       }
 
-      if (portfolio.passwordPortfolio) {
-        console.log("WARNING: plaintext passwordPortfolio is still stored in the portfolio");
+      if (self.portfolio.plaintextPortfolio) {
+        console.log("WARNING: plaintext plaintextPortfolio is still stored in the portfolio");
       }
 
-      blakley.verify(userInput, portfolio).then(function(blakley_secret) {
+      blakley.verify(userInput, self.portfolio).then(function(blakley_secret) {
         self.secret = blakley_secret;
         console.log("verified correctly", self.secret.toString());
         resolve();

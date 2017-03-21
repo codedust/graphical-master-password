@@ -116,11 +116,13 @@ for(var i = 0; i < xTest.length; i++) {
   test("xtest["+i+"]", xTest[i].compare(xExpect[i]), 0);
 }
 
+// let's generate a random portfolio
+var plaintextPortfolio = blakley.generateRandomPortfolio(numberOfGroups, numberOfImagesPerGroup, portfolioSize);
 
-blakley.New().then(function(portfolio) {
+blakley.New(plaintextPortfolio).then(function(portfolio) {
   // generating correct user input ;)
-  var userInput = blakley.randomSampleArray(portfolio.passwordPortfolio).slice(0, t);
-  portfolio.passwordPortfolio = null; // we must not store this
+  var userInput = blakley.randomSampleArray(portfolio.plaintextPortfolio).slice(0, t);
+  portfolio.plaintextPortfolio = null; // we must not store this
   blakley.verify(userInput, portfolio).then(function(secret) {
     test("verifyCorrectly", true, true);
     console.log("secretVeri", secret.toString());
@@ -129,10 +131,13 @@ blakley.New().then(function(portfolio) {
   });
 });
 
-blakley.New().then(function(portfolio) {
+// let's generate a random portfolio
+plaintextPortfolio = blakley.generateRandomPortfolio(numberOfGroups, numberOfImagesPerGroup, portfolioSize);
+
+blakley.New(plaintextPortfolio).then(function(portfolio) {
   // generating correct user input ;)
-  var userInput = blakley.randomSampleArray(portfolio.passwordPortfolio).slice(0, t);
-  portfolio.passwordPortfolio = null; // we must not store this
+  var userInput = blakley.randomSampleArray(portfolio.plaintextPortfolio).slice(0, t);
+  portfolio.plaintextPortfolio = null; // we must not store this
   userInput[1][1]++;
   blakley.verify(userInput, portfolio).then(function(secret) {
     test("verifyInvalid", true, false);

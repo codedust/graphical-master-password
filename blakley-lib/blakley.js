@@ -277,15 +277,16 @@ var blakley = (function() {
       e => [e, getRandomInt(0, numberOfImagesPerGroup - 1).toJSValue()]);
     return portfolio;
   }
+  self.generateRandomPortfolio = generateRandomPortfolio;
 
   // construct the hash tuples from the portfolio
-  function constructHashTuples(passwordPortfolio, salt, p) {
+  function constructHashTuples(plaintextPortfolio, salt, p) {
     return new Promise(function(resolve, reject) {
-      var hashTuples = new Array(passwordPortfolio.length);
+      var hashTuples = new Array(plaintextPortfolio.length);
       var hashPromises = [];
 
-      for(var i = 0; i < passwordPortfolio.length; i++) {
-        var entry = passwordPortfolio[i];
+      for(var i = 0; i < plaintextPortfolio.length; i++) {
+        var entry = plaintextPortfolio[i];
         var key = new BigInteger(entry[0]).multiply(
           new BigInteger(10).pow(new BigInteger(integerLength(entry[1])))
         ).add(new BigInteger(entry[1]));
@@ -293,7 +294,7 @@ var blakley = (function() {
           var buffer = bigIntegerToUint8Array(key.add(salt).mod(p));
           var promise = crypto.subtle.digest("SHA-256", buffer).then(function (hash) {
             hashTuples[i] = [
-              passwordPortfolio[i][0],
+              plaintextPortfolio[i][0],
               uint8ArrayToBigInteger(new Uint8Array(hash)).mod(p)
             ];
           });
@@ -312,15 +313,12 @@ var blakley = (function() {
   //                     Enrollment phase
   // =========================================================
 
-  function New() {
+  function New(plaintextPortfolio) {
     return new Promise(function(resolve, reject){
       // The parameter p is chosen according to section 5.2 in the paper
 
       // TODO: use parameters here
       var p = new BigInteger(nextPrime(Math.pow(16, 7) * 2));
-
-      // let's generate a random portfolio
-      var passwordPortfolio = generateRandomPortfolio(numberOfGroups, numberOfImagesPerGroup, portfolioSize);
 
       // a randomly choosen salt used for hashing
       var salt = getRandomInt(0, new BigInteger(2).pow(64).subtract(1));
@@ -339,7 +337,7 @@ var blakley = (function() {
         var hashed_secret = uint8ArrayToBigInteger(new Uint8Array(hash));
 
         // construct the hash tuples
-        constructHashTuples(passwordPortfolio, salt, p).then(hashTuples => {
+        constructHashTuples(plaintextPortfolio, salt, p).then(hashTuples => {
           var M = [];
           for(i = 0; i < n; i++) {
             // for each of the tuples, we choose t - 1 random coefficients
@@ -355,7 +353,7 @@ var blakley = (function() {
 
           var groups = hashTuples.map((e) => e[0]);
 
-          var portfolio = {M, groups, hashed_secret, salt, passwordPortfolio, p};
+          var portfolio = {M, groups, hashed_secret, salt, plaintextPortfolio, p};
 
           resolve(portfolio);
         });

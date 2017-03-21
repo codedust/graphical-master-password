@@ -12,20 +12,23 @@
 }
 
 #container button.warn {
-    background-color: #7a2e2a;    
+    background-color: #7a2e2a;
 }
 
 #container button.highlight {
-    background-color: #89d16e;    
+    background-color: #89d16e;
 }
 
 #container button.secondary {
-    background-color: #C0C0C0;  
+    background-color: #C0C0C0;
 }
 
 #container h1 {
-	font-size: 22px;
-	margin: 9px 0 8px 0;
+	font-size: 2em;
+	font-weight: lighter;
+	margin: 0.5em 0 0.5em 0;
+	padding-bottom: 0.25em;
+	border-bottom: 1px solid #bbb;
 }
 
 #container p {
@@ -37,7 +40,7 @@
 }
 
 #container .passwordGallery > div > img {
-	border-bottom-width: 5px;	
+	border-bottom-width: 5px;
 }
 
 /* Other styles */
@@ -87,7 +90,7 @@
 	padding: 1% 0;
 	opacity: 0.7;
 	border-color: transparent;
-	border-bottom-style: solid;	
+	border-bottom-style: solid;
 }
 
 #container .passwordDisplay {

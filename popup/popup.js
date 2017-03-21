@@ -40,12 +40,12 @@ $(function() {
     }
 
     // update the image
-    var collectionId = plaintextPortfolio[clickCount][0];
+    var groupId = plaintextPortfolio[clickCount][0];
     var itemId = plaintextPortfolio[clickCount][1];
-    $('#container .view#setupSteps .passwordDisplay img').attr('src', Config.IMG_BASE_DIR + (collectionId + 1).toString() + '/' + (itemId + 1).toString() + Config.IMG_FULLSIZE_FILENAME_SUFFIX + Config.IMG_FILE_EXTENSION);
+    $('#container .view#setupSteps .passwordDisplay img').attr('src', Config.IMG_BASE_DIR + (groupId + 1).toString() + '/' + (itemId + 1).toString() + Config.IMG_FULLSIZE_FILENAME_SUFFIX + Config.IMG_FILE_EXTENSION);
   }
 
-  function showLoginGallery(collectionId) {
+  function showLoginGallery(groupId) {
     var itemIds = Array.apply(null, {length: Config.NUM_IMAGES_PER_GROUP}).map(Number.call, Number);
 
     $('#container .view#login div.passwordGallery > div > img').each(function(index) {
@@ -53,10 +53,14 @@ $(function() {
         return;
       }
 
-      $(this).attr('src', Config.IMG_BASE_DIR + (collectionId + 1).toString() + '/' + (itemIds[index] + 1).toString() + Config.IMG_FILE_EXTENSION);
-      $(this).attr('data-collection', collectionId);
+      $(this).attr('src', Config.IMG_BASE_DIR + (groupId + 1).toString() + '/' + (itemIds[index] + 1).toString() + Config.IMG_FILE_EXTENSION);
+      $(this).attr('data-collection', groupId);
       $(this).attr('data-item', itemIds[index]);
     });
+  }
+
+  function showChangePasswordGallery(groupId) {
+    console.log('TODO');
   }
 
   function setActiveView(viewId) {
@@ -166,6 +170,7 @@ $(function() {
   });
 
   $('#container .view#loggedIn .changePasswordButton').click(function() {
+    showChangePasswordGallery(0);
     setActiveView('changePassword');
   });
 
