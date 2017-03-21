@@ -1,111 +1,132 @@
 /* Styles for easy theming */
 
+body {
+  overflow-x: hidden;
+}
+
 #container {
-	font-family: Sans-serif, Arial;
-	width: 392px;
+  font-family: Sans-serif, Arial;
+  width: 300px;
+  padding: 1em 1.5em 1em 1em;
 }
 
 #container button {
     background-color: #53a7ea;
     color: #ffffff;
     font-size: 16px;
+    width: 99%;
 }
 
 #container button.warn {
     background-color: #7a2e2a;
 }
 
+#container button.small {
+  display: inline-block;
+  width: 32%;
+}
+
 #container button.highlight {
-    background-color: #89d16e;
+    background-color: #69b14e;
 }
 
 #container button.secondary {
-    background-color: #C0C0C0;
+    background-color: #bbb;
 }
 
 #container h1 {
-	font-size: 2em;
-	font-weight: lighter;
-	margin: 0.5em 0 0.5em 0;
-	padding-bottom: 0.25em;
-	border-bottom: 1px solid #bbb;
+  font-size: 1.5em;
+  font-weight: lighter;
+  margin: 0;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid #bbb;
 }
 
 #container p {
-	font-size: 16px;
+  font-size: 1em;
+}
+
+#container .groupCounter {
+  float: right;
+  font-style: italic;
+  font-size: 0.75em;
 }
 
 #container .passwordGallery > div > img:hover {
-	border-bottom-color: #53a7ea;
+  border-bottom-color: #53a7ea;
 }
 
 #container .passwordGallery > div > img {
-	border-bottom-width: 5px;
+  border-bottom-width: 5px;
 }
 
 /* Other styles */
 #container {
-	-moz-user-select: none;
-	-khtml-user-select: none;
-	-webkit-user-select: none;
-	user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 #container h1 {
-	text-align: center;
+  text-align: center;
 }
 
 #container p {
-	user-select: none;
-	text-align: justify;
+  user-select: none;
+  text-align: justify;
+}
+
+#container .buttonbox {
+  text-align: center;
 }
 
 #container button {
-	cursor: pointer;
-    border: none;
-    padding: 3% 4%;
-    text-align: center;
-    text-decoration: none;
-    display: block;
-	width: 100%;
-	margin: 1% 0;
-	opacity: 0.8;
+  cursor: pointer;
+  border: none;
+  padding: 3% 4%;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  margin: 1% 0;
+  opacity: 0.8;
 }
 
 #container button:hover {
-	opacity: 1.0;
+  opacity: 1.0;
 }
 
 #container .view {
-	display: none;
+  display: none;
 }
 
 #container .view.active {
-	display: block;
+  display: block;
 }
 
 #container .passwordGallery > div > img {
-	width: 21%;
-	margin: 1% 2%;
-	padding: 1% 0;
-	opacity: 0.7;
-	border-color: transparent;
-	border-bottom-style: solid;
+  width: 21%;
+  margin: 1% 2%;
+  padding: 1% 0;
+  opacity: 0.7;
+  border-color: transparent;
+  border-bottom-style: solid;
 }
 
 #container .passwordDisplay {
-	text-align: center;
+  text-align: center;
 }
 
 #container .passwordDisplay > img {
-	width: 100%;
+  width: 100%;
 }
 
 #container  .passwordGallery > div > img:hover {
-	cursor: pointer;
-	opacity: 1.0;
+  cursor: pointer;
+  opacity: 1.0;
 }
 
 #container .hidden {
-	display: none;
+  display: none;
 }

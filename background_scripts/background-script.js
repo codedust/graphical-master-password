@@ -1,24 +1,18 @@
+/*jshint esversion: 6 */
 browser.runtime.onMessage.addListener(function(message) {
   console.log("->", message);
   switch (message.action) {
     case "requestPortfolioStatus":
-      if (!PassMan.portfolioInitialized()) {
-        console.log("not init");
+      if (!PassMan.portfolioInitialized() || !PassMan.setupComplete()) {
         // portfolio has not been created yet
-        PassMan.createPortfolio().then(function(portfolio){
-          browser.tabs.sendMessage(0, {
-            "action": "portfolioStatus",
-            "status": "setup",
-            "data": portfolio.plaintextPortfolio
+        PassMan.createPortfolio(null).then(function(){
+          PassMan.getPlaintextPortfolio().then(function(plaintextPortfolio){
+            browser.tabs.sendMessage(0, {
+              "action": "portfolioStatus",
+              "status": "setup",
+              "data": plaintextPortfolio
+            });
           });
-        });
-      } else if (!PassMan.setupComplete()) {
-        // portfolio has been created but images have not been shown to the user
-        // yet
-        browser.tabs.sendMessage(0, {
-          "action": "portfolioStatus",
-          "status": "setup",
-          "data": PassMan.getPortfolio().plaintextPortfolio
         });
       } else if (!PassMan.loginSuccessful()) {
         // portfolio setup is completed. Proceed with login.
@@ -29,18 +23,24 @@ browser.runtime.onMessage.addListener(function(message) {
         });
       } else {
         // user is logged in
-        browser.tabs.sendMessage(0, {
-          "action": "loginSuccessful",
-          "data": PassMan.getRandomizedCollectionIds()
+        PassMan.getPlaintextPortfolio().then(function(plaintextPortfolio){
+          browser.tabs.sendMessage(0, {
+            "action": "portfolioStatus",
+            "status": "loginSuccessful",
+            "data": plaintextPortfolio
+          });
         });
       }
       break;
     case "validatePlaintextPortfolio":
       // let's validate the user input
       PassMan.validateUserInput(message.data).then(function(secret){
-        browser.tabs.sendMessage(0, {
-          "action": "loginSuccessful",
-          "data": PassMan.getRandomizedCollectionIds()
+        PassMan.getPlaintextPortfolio().then(function(plaintextPortfolio){
+          browser.tabs.sendMessage(0, {
+            "action": "portfolioStatus",
+            "status": "loginSuccessful",
+            "data": plaintextPortfolio
+          });
         });
         PassMan.decryptPasswords();
       }, function(){
@@ -61,12 +61,26 @@ browser.runtime.onMessage.addListener(function(message) {
     case "resetPortfolio":
       // let's reset the portfolio
       PassMan.removePortfolio();
-      PassMan.createPortfolio().then(function(portfolio){
+      PassMan.createPortfolio(null).then(function() {
+        PassMan.getPlaintextPortfolio().then(function(plaintextPortfolio){
+          browser.tabs.sendMessage(0, {
+            "action": "portfolioStatus",
+            "status": "setup",
+            "data": plaintextPortfolio
+          });
+        });
+      });
+      break;
+    case "changePortfolio":
+      PassMan.changePortfolioGroup(message.data).then(plaintextPortfolio => {
+        console.log("Successfully changed portfolio group!");
         browser.tabs.sendMessage(0, {
           "action": "portfolioStatus",
-          "status": "setup",
-          "data": portfolio.plaintextPortfolio
+          "status": "change",
+          "data": plaintextPortfolio
         });
+      }, function(reason) {
+        console.log("Error while changing portfolio group!", reason);
       });
       break;
     default:

@@ -22,11 +22,11 @@
 			<div class="passwordDisplay">
 				<img />
 			</div>
-			<div>
+			<div class="buttonbox">
+				<button class="previousButton small">Previous</button>
+				<button class="secondary cancelButton small">Cancel</button>
+				<button class="nextButton small">Next</button>
 				<button class="hidden highlight finishButton">Finish</button>
-				<button class="nextButton">Next</button>
-				<button class="hidden secondary previousButton">Previous</button>
-				<button class="warn cancelButton">Cancel</button>
 			</div>
 		</div>
 		<div class="view" id="setupComplete">
@@ -93,31 +93,17 @@
 		<div class="view" id="changePassword">
 			<h1>Change password</h1>
 			<div>
-				<p>Please choose the image gallery you would like to replace.</p>
-				<div class="passwordGallery">
-					<div>
-						<img /><img /><img /><img />
-					</div>
-					<div>
-						<img /><img /><img /><img />
-					</div>
-					<div>
-						<img /><img /><img /><img />
-					</div>
-					<div>
-						<img /><img /><img /><img />
-					</div>
-				</div>
+				<p>Please choose the image you would like to replace or simply have another look at your login images.</p>
+				<span class="groupCounter">Gallery <span class="currentStep"></span> of <span class="numImageGroups"></span></span>
 				<div class="passwordDisplay">
 					<img />
 				</div>
-				<p>Gallery <span class="currentStep"></span> of <span class="numImageGroups"></span></p>
 			</div>
-			<div>
+			<div class="buttonbox">
 				<button class="warn resetImageGroupButton">Replace this immage gallery</button>
-				<button class="nextButton">Next</button>
-				<button class="hidden secondary previousButton">Previous</button>
-				<button class="hidden highlight finishButton">Done</button>
+				<button class="previousButton small">Previous</button>
+				<button class="warn cancelButton small">Cancel</button>
+				<button class="nextButton small">Next</button>
 			</div>
 		</div>
 	</div>

@@ -121,8 +121,7 @@ var plaintextPortfolio = blakley.generateRandomPortfolio(numberOfGroups, numberO
 
 blakley.New(plaintextPortfolio).then(function(portfolio) {
   // generating correct user input ;)
-  var userInput = blakley.randomSampleArray(portfolio.plaintextPortfolio).slice(0, t);
-  portfolio.plaintextPortfolio = null; // we must not store this
+  var userInput = blakley.randomSampleArray(plaintextPortfolio).slice(0, t);
   blakley.verify(userInput, portfolio).then(function(secret) {
     test("verifyCorrectly", true, true);
     console.log("secretVeri", secret.toString());
@@ -136,8 +135,7 @@ plaintextPortfolio = blakley.generateRandomPortfolio(numberOfGroups, numberOfIma
 
 blakley.New(plaintextPortfolio).then(function(portfolio) {
   // generating correct user input ;)
-  var userInput = blakley.randomSampleArray(portfolio.plaintextPortfolio).slice(0, t);
-  portfolio.plaintextPortfolio = null; // we must not store this
+  var userInput = blakley.randomSampleArray(plaintextPortfolio).slice(0, t);
   userInput[1][1]++;
   blakley.verify(userInput, portfolio).then(function(secret) {
     test("verifyInvalid", true, false);

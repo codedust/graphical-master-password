@@ -2,6 +2,7 @@
 (function(){
   var self = {};
   self.secret = null;
+  self.plaintextPortfolio = null;
   self.portfolio = loadPortfolio();
 
   function shuffleArray(arr) {
@@ -16,27 +17,52 @@
     return arr;
   }
 
-  function createPortfolio() {
+  function createPortfolio(plaintextPortfolio) {
     return new Promise(function(resolve, reject){
       // let's generate a random portfolio
-      var plaintextPortfolio = blakley.generateRandomPortfolio(numberOfGroups, numberOfImagesPerGroup, portfolioSize);
+      if (!(plaintextPortfolio instanceof Array)) {
+        plaintextPortfolio = blakley.generateRandomPortfolio(
+          Config.NUM_IMAGE_GROUPS,
+          Config.NUM_IMAGES_PER_GROUP,
+          Config.NUM_IMAGE_GROUPS_PER_PORTFOLIO);
+      }
 
       blakley.New(plaintextPortfolio).then(function(newPortfolio) {
-        console.log(newPortfolio);
+        self.plaintextPortfolio = plaintextPortfolio;
         self.portfolio = newPortfolio;
         self.portfolio.setupComplete = false;
-        self.secret = null;
-        resolve(self.portfolio);
+        resolve();
       });
     });
   }
 
-  function getPortfolio() {
-    if (!portfolioInitialized() || setupComplete()) {
-      return null;
-    } else {
-      return self.portfolio;
-    }
+  function getPlaintextPortfolio() {
+    return new Promise(function(resolve, reject){
+      if (!setupComplete()) {
+        console.log("[getPlaintextPortfolio] !setupComplete() -> ", self.plaintextPortfolio);
+        resolve(self.plaintextPortfolio);
+      } else if (!loginSuccessful()) {
+        console.log("[getPlaintextPortfolio] rejecting because user is not logged in and setup is complete.");
+        reject();
+      } else {
+        console.log("[getPlaintextPortfolio] decrypting encryptedPlaintextPortfolio");
+        // we add 42 to our secret because hash(secret) is publicly known, but
+        // hash(secret + 42) is not
+        var secretUint8Array = blakley.bigIntegerToUint8Array(new BigInteger(self.secret).add(42));
+        crypto.subtle.digest('SHA-256', secretUint8Array).then(pwHash => {
+          var cryptoData = self.portfolio.encryptedPlaintextPortfolio.split('|');
+          var ctBuffer = blakley.bigIntegerToUint8Array(new BigInteger(cryptoData[0]));
+          var iv = blakley.bigIntegerToUint8Array(new BigInteger(cryptoData[1]));
+          var alg = { name: 'AES-GCM', iv: iv };
+
+          crypto.subtle.importKey('raw', pwHash, alg, false, ['decrypt']).then(key => {
+            crypto.subtle.decrypt(alg, key, ctBuffer).then(ctRaw => {
+              resolve(JSON.parse(new TextDecoder().decode(ctRaw)));
+            });
+          });
+        });
+      }
+    });
   }
 
   function portfolioInitialized() {
@@ -48,8 +74,37 @@
   }
 
   function loginSuccessful() {
-    console.log("loginSuccessful", self.secret);
     return (setupComplete() && self.secret !== null);
+  }
+
+  function changePortfolioGroup(groupId) {
+    return new Promise(function(resolve, reject){
+      var index = self.portfolio.groups.indexOf(groupId);
+      if (index == -1) {
+        reject("changePortfolioGroup: groupId not found in current portfolio.");
+        return;
+      }
+
+      var newGroupId = groupId;
+      while(self.portfolio.groups.indexOf(newGroupId) != -1) {
+        newGroupId = blakley.math.getRandomInt(0, Config.NUM_IMAGE_GROUPS - 1).toJSValue();
+      }
+
+      getPlaintextPortfolio().then(plaintextPortfolio => {
+        plaintextPortfolio[index] = [
+          newGroupId, blakley.math.getRandomInt(0, Config.NUM_IMAGES_PER_GROUP - 1).toJSValue()
+        ];
+
+        createPortfolio(plaintextPortfolio).then(function() {
+          savePortfolio();
+          validateUserInput(plaintextPortfolio.slice(0, Config.NUM_IMAGE_GROUPS_PER_LOGIN)).then(function(){
+            resolve(plaintextPortfolio);
+          }, function () {
+            reject("changePortfolioGroup: validateUserInput failed");
+          });
+        });
+      });
+    });
   }
 
 
@@ -128,10 +183,8 @@
 
       browser.logins.search({}).then(function(data) {
         for (var i = 0; i < data.length; i++) {
-          console.log("passwd", data[i]);
           var currentLogin = data[i];
           var promise = encryptPassword(currentLogin, self.secret).then(result => {
-            console.log("encrypted", result);
             currentLogin = result.login;
             browser.logins.remove(currentLogin);
             currentLogin.username = blakleyPasswordPrefix + currentLogin.username.replace(blakleyPasswordPrefix, '');
@@ -158,10 +211,8 @@
 
       browser.logins.search({}).then(function(data) {
         for (var i = 0; i < data.length; i++) {
-          console.log("passwd", data[i]);
           var currentLogin = data[i];
           var promise = decryptPassword(currentLogin, self.secret).then(result => {
-            console.log("unencrypted", result);
             currentLogin = result.login;
             browser.logins.remove(currentLogin);
             currentLogin.username = blakleyPasswordPrefix + result.login.username.replace(blakleyPasswordPrefix, '');
@@ -184,6 +235,7 @@
     encryptPasswords().then(function() {
       console.log('setting secret to null');
       self.secret = null;
+      self.plaintextPortfolio = null;
     });
   }
 
@@ -198,10 +250,6 @@
   function savePortfolio() {
     // the user has seen the portfolio images (we never store plaintext data!)
     self.portfolio.setupComplete = true;
-
-    // we can now safely delete the plaintext information that we *must* not
-    // store
-    self.portfolio.plaintextPortfolio = null;
 
     // we have to convert BigIntegers to strings since localStorage is not
     // capable of correctly handling the prototype (object type) of the objects
@@ -219,6 +267,7 @@
     sPortfolio.hashed_secret = self.portfolio.hashed_secret.toString();
     sPortfolio.salt = self.portfolio.salt.toString();
     sPortfolio.p = self.portfolio.p.toString();
+    sPortfolio.encryptedPlaintextPortfolio = self.portfolio.encryptedPlaintextPortfolio;
 
     console.log("Saving portfolio to localStorage...");
     localStorage.setItem('portfolio', JSON.stringify(sPortfolio));
@@ -248,6 +297,7 @@
     self.portfolio.salt = new BigInteger(sPortfolio.salt);
     self.portfolio.p = new BigInteger(sPortfolio.p);
     self.portfolio.setupComplete = true; // we never store plaintext data!
+    self.portfolio.encryptedPlaintextPortfolio = sPortfolio.encryptedPlaintextPortfolio;
 
     return self.portfolio;
   }
@@ -274,12 +324,8 @@
   //
   function validateUserInput(userInput) {
     return new Promise(function(resolve, reject){
-      if (!userInput || userInput.length != Config.NUM_STEPS_PER_LOGIN) {
+      if (!userInput || userInput.length != Config.NUM_IMAGE_GROUPS_PER_LOGIN) {
         reject();
-      }
-
-      if (self.portfolio.plaintextPortfolio) {
-        console.log("WARNING: plaintext plaintextPortfolio is still stored in the portfolio");
       }
 
       blakley.verify(userInput, self.portfolio).then(function(blakley_secret) {
@@ -296,7 +342,8 @@
 
   PassMan = {
     createPortfolio: createPortfolio,
-    getPortfolio: getPortfolio,
+    changePortfolioGroup: changePortfolioGroup,
+    getPlaintextPortfolio: getPlaintextPortfolio,
     portfolioInitialized: portfolioInitialized,
     setupComplete: setupComplete,
     loginSuccessful: loginSuccessful,

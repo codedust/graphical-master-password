@@ -330,9 +330,11 @@ var blakley = (function() {
       }
 
       // x[0] is our secret that can be retrieved by the blakley secret sharing
+      var secret = x[0];
+
       // it is now used to build a salted hash `hashed_secret` that can be used for
       // verification of our retrieved secret is correct
-      var buffer = bigIntegerToUint8Array(x[0].add(salt));
+      var buffer = bigIntegerToUint8Array(secret.add(salt));
       crypto.subtle.digest("SHA-256", buffer).then(function(hash) {
         var hashed_secret = uint8ArrayToBigInteger(new Uint8Array(hash));
 
@@ -353,9 +355,25 @@ var blakley = (function() {
 
           var groups = hashTuples.map((e) => e[0]);
 
-          var portfolio = {M, groups, hashed_secret, salt, plaintextPortfolio, p};
+          // next, we encrypt the plaintext portfolio with the secret
+          const ptUtf8 = new TextEncoder().encode(JSON.stringify(plaintextPortfolio));
 
-          resolve(portfolio);
+          // we add 42 to our secret because hash(secret) is publicly known, but
+          // hash(secret + 42) is not
+          var secretUint8Array = bigIntegerToUint8Array(new BigInteger(secret).add(42));
+          crypto.subtle.digest('SHA-256', secretUint8Array).then(pwHash => {
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const alg = { name: 'AES-GCM', iv: iv };
+            crypto.subtle.importKey('raw', pwHash, alg, false, ['encrypt']).then(key => {
+              crypto.subtle.encrypt(alg, key, ptUtf8).then(ctBuffer => {
+                var ctBufferBig = uint8ArrayToBigInteger(new Uint8Array(ctBuffer));
+                var ivBig = uint8ArrayToBigInteger(iv);
+                var encryptedPlaintextPortfolio = ctBufferBig.toString() + "|" + ivBig.toString();
+                var portfolio = {M, groups, hashed_secret, salt, encryptedPlaintextPortfolio, p};
+                resolve(portfolio);
+              });
+            });
+          });
         });
       });
     });
