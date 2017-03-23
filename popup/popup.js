@@ -1,39 +1,41 @@
 $(function() {
   /* Misc Variables */
   var clickCount;
+  var clickCountMax;
   var plaintextPortfolio;
   var portfolioGroups;
   var userInput;
-  
+
   /* Helper Functions */
   function applyInternationalization() {
     var containerHTML = document.getElementById('container').innerHTML;
-	
+
 	// find templates wrapped in {{..}}
     var translationTemplates = containerHTML
   	.match(/{{\s*[\w\.]+\s*}}/g)
   	.map(function(x) {
   		return x.match(/[\w\.]+/)[0];
   	});
-  
+
     var translationReplacements = {};
-    var translationRegex = ''
-    
+    var translationRegex = '';
+
 	// build replacement map
 	for (var i = 0; i < translationTemplates.length; i++) {
   	var templateId = '{{' + translationTemplates[i] + '}}';
   	  translationReplacements[templateId] = browser.i18n.getMessage(translationTemplates[i]);
   	  translationRegex += (translationRegex.length > 0 ? '|' : '') + templateId;
     }
-    
+
 	// replace in one go
     document.getElementById('container').innerHTML = containerHTML.replace(new RegExp(translationRegex, 'g'), function(matched){
       return translationReplacements[matched];
-    });	
+    });
   }
-  
+
   function prepareLogin() {
     clickCount = 0;
+    clickCountMax = 0;
     userInput = [];
     showLoginGallery(portfolioGroups[0]);
   }
@@ -41,6 +43,7 @@ $(function() {
   function showSetupImage(image) {
     // update the click count
     clickCount = image;
+    clickCountMax = Math.max(clickCount, clickCountMax);
 
     // update the text
     $('#container .view#setupSteps span.currentStep').text(clickCount + 1);
@@ -54,17 +57,36 @@ $(function() {
       finishButton.removeClass('hidden');
     }
 
-    if (clickCount >= Config.NUM_IMAGE_GROUPS_PER_PORTFOLIO - 1) {
-      $('#container .view#setupSteps .nextButton').addClass('secondary');
+    if (clickCount == Config.NUM_IMAGE_GROUPS_PER_PORTFOLIO - 1) {
+      nextButton.prop('disabled', true);
+      nextButton.addClass('gray');
+    } else if (clickCount < clickCountMax) {
+      nextButton.prop('disabled', false);
+      nextButton.removeClass('gray');
+      nextButton.removeClass('animateToActive');
+    } else if (clickCount == clickCountMax) {
+      nextButton.prop('disabled', true);
+
+      if (clickCount < Config.NUM_IMAGE_GROUPS_PER_PORTFOLIO - 1) {
+        nextButton.removeClass('animateToActive');
+        window.setTimeout(function(){
+          nextButton.addClass('animateToActive');
+        }, 1);
+        window.setTimeout(function(){
+          nextButton.prop('disabled', false);
+        }, 3000);
+      }
     } else {
-      $('#container .view#setupSteps .nextButton').removeClass('secondary');
+      nextButton.prop('disabled', false);
+      nextButton.removeClass('animateToActive');
     }
 
-
-    if (clickCount <= 1) {
-      $('#container .view#setupSteps .previousButton').addClass('secondary');
+    if (clickCount <= 0) {
+      previousButton.prop('disabled', true);
+      previousButton.addClass('gray');
     } else {
-      $('#container .view#setupSteps .previousButton').removeClass('secondary');
+      previousButton.prop('disabled', false);
+      previousButton.removeClass('gray');
     }
 
     // update the image
@@ -127,7 +149,7 @@ $(function() {
   }
 
   /* Initialization */
-  
+
   applyInternationalization();
 
   $('#container span.numStepsPerLogin').text(Config.NUM_IMAGE_GROUPS_PER_LOGIN);
@@ -182,9 +204,11 @@ $(function() {
   /* Event Handling */
 
   // === setup ===
-  
+
   $('#container .view#setup .startButton').click(function() {
-    showSetupImage(0);
+    clickCount = 0;
+    clickCountMax = 0;
+    showSetupImage(clickCount);
     setActiveView('setupSteps');
   });
 
@@ -264,6 +288,11 @@ $(function() {
 
   $('#container .view#changePassword .resetImageGroupButton').click(function() {
     browser.runtime.sendMessage({"action": "changePortfolio", "data": plaintextPortfolio[clickCount][0]});
+
+    $(this).prop('disabled', true);
+    window.setTimeout(function(){
+      $('#container .view#changePassword .resetImageGroupButton').prop('disabled', false);
+    }, 1000);
   });
 
   $('#container .view#changePassword .cancelButton').click(function() {

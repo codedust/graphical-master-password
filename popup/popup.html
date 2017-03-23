@@ -14,7 +14,7 @@
 				<p>{{setupRequiredExplanation}}<span class="numImageGroups"></span>{{setupRequiredExplanationCont}}</p>
 			</div>
 			<div>
-				<button class="startButton">{{setupRequiredStartButtonLabel}}</button>
+				<button class="startButton blue">{{setupRequiredStartButtonLabel}}</button>
 			</div>
 		</div>
 		<div class="view" id="setupSteps">
@@ -23,10 +23,10 @@
 				<img />
 			</div>
 			<div class="buttonbox">
-				<button class="previousButton small">{{setupStepsPreviousButtonLabel}}</button>
-				<button class="warn cancelButton small">{{setupStepsCancelButtonLabel}}</button>
-				<button class="nextButton small">{{setupStepsNextButtonLabel}}</button>
-				<button class="hidden highlight finishButton">{{setupStepsFinishButtonLabel}}</button>
+				<button class="previousButton small blue">{{setupStepsPreviousButtonLabel}}</button>
+				<button class="red cancelButton small">{{setupStepsCancelButtonLabel}}</button>
+				<button class="nextButton small blue">{{setupStepsNextButtonLabel}}</button>
+				<button class="hidden green finishButton">{{setupStepsFinishButtonLabel}}</button>
 			</div>
 		</div>
 		<div class="view" id="setupComplete">
@@ -35,7 +35,7 @@
 				<p>Whenever you log in, you will be presented with <span class="numStepsPerLogin"></span> random image galleries. Each gallery will contain one of the images from your graphical password. Click on each of these images to authenticate yourself.</p>
 			</div>
 			<div>
-				<button class="loginButton">Login Now</button>
+				<button class="loginButton blue">Login Now</button>
 			</div>
 		</div>
 		<div class="view" id="login">
@@ -55,7 +55,7 @@
 				</div>
 			</div>
 			<div>
-				<button class="forgotPasswordButton">I forgot my password</button>
+				<button class="forgotPasswordButton blue">I forgot my password</button>
 			</div>
 		</div>
 		<div class="view" id="loginFailed">
@@ -64,7 +64,7 @@
 				<p>Oh no! You got it wrong somewhere.</p>
 			</div>
 			<div>
-				<button class="loginButton">Try Again</button>
+				<button class="loginButton blue">Try Again</button>
 			</div>
 		</div>
 		<div class="view" id="loggedIn">
@@ -74,8 +74,8 @@
 				<p>Firefox is now able to access your passwords stored in the password manager.</p>
 			</div>
 			<div>
-				<button class="changePasswordButton">Change Password</button>
-				<button class="warn logoutButton">Logout</button>
+				<button class="changePasswordButton blue">Change Password</button>
+				<button class="green logoutButton">Logout</button>
 			</div>
 		</div>
 		<div class="view" id="forgotPassword">
@@ -84,10 +84,10 @@
 				<p>Warning! All saved passwords will be lost if you reset your graphical master password!</p>
 			</div>
 			<div>
-				<button class="warn resetPasswordButton">I know about the consequences.<br>Reset my Password</button>
+				<button class="red resetPasswordButton">I know about the consequences.<br>Reset my Password</button>
 			</div>
 			<div>
-				<button class="okButton">Cancel</button>
+				<button class="okButton green">Cancel</button>
 			</div>
 		</div>
 		<div class="view" id="changePassword">
@@ -100,10 +100,10 @@
 				</div>
 			</div>
 			<div class="buttonbox">
-				<button class="warn resetImageGroupButton">Replace this image gallery</button>
-				<button class="previousButton small">Previous</button>
-				<button class="highlight cancelButton small">Finish</button>
-				<button class="nextButton small">Next</button>
+				<button class="red resetImageGroupButton">Replace this image gallery</button>
+				<button class="previousButton small blue">Previous</button>
+				<button class="green cancelButton small">Finish</button>
+				<button class="nextButton small blue">Next</button>
 			</div>
 		</div>
 	</div>
