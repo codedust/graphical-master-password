@@ -1,12 +1,37 @@
 $(function() {
   /* Misc Variables */
-
   var clickCount;
   var plaintextPortfolio;
   var portfolioGroups;
   var userInput;
-
+  
   /* Helper Functions */
+  function applyInternationalization() {
+    var containerHTML = document.getElementById('container').innerHTML;
+	
+	// find templates wrapped in {{..}}
+    var translationTemplates = containerHTML
+  	.match(/{{\s*[\w\.]+\s*}}/g)
+  	.map(function(x) {
+  		return x.match(/[\w\.]+/)[0];
+  	});
+  
+    var translationReplacements = {};
+    var translationRegex = ''
+    
+	// build replacement map
+	for (var i = 0; i < translationTemplates.length; i++) {
+  	var templateId = '{{' + translationTemplates[i] + '}}';
+  	  translationReplacements[templateId] = browser.i18n.getMessage(translationTemplates[i]);
+  	  translationRegex += (translationRegex.length > 0 ? '|' : '') + templateId;
+    }
+    
+	// replace in one go
+    document.getElementById('container').innerHTML = containerHTML.replace(new RegExp(translationRegex, 'g'), function(matched){
+      return translationReplacements[matched];
+    });	
+  }
+  
   function prepareLogin() {
     clickCount = 0;
     userInput = [];
@@ -155,6 +180,8 @@ $(function() {
   /* Event Handling */
 
   // === setup ===
+  
+  applyInternationalization();
 
   $('#container .view#setup .startButton').click(function() {
     showSetupImage(0);

@@ -1,7 +1,6 @@
 {
-
-  "name": "Graphical Master Password",
-  "description": "Adds a shoulder-surfing resistant graphical master password to the firefox password manager",
+  "name": "__MSG_extensionName__",
+  "description": "__MSG_extensionDescription__",
   "manifest_version": 2,
   "version": "0.1",
   "homepage_url": "https://www.secuso.informatik.tu-darmstadt.de/en/secuso/",
@@ -29,5 +28,7 @@
   },
 
   "web_accessible_resources": [
-  ]
+  ],
+  
+  "default_locale": "de"
 }
