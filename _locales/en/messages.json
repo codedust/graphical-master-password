@@ -1,0 +1,22 @@
+{
+  "extensionName": {
+    "message": "Grafisches Master-Passwort",
+    "description": "Name of the extension."
+  },
+
+  "extensionDescription": {
+    "message": "Adds a shoulder-surfing resistant graphical master password to the Firefox password manager",
+    "description": "Description of the extension."
+  },
+  
+  "setupRequiredHeadline": {
+    "message": "Setup Required",
+    "description": "Headline for the initial setup dialog."
+  },
+  
+  "setupRequiredStatus": {
+    "message": "You have not set up a graphical password yet.",
+    "description": "Headline for the initial setup dialog."
+  }
+
+}
