@@ -28,5 +28,7 @@
   },
 
   "web_accessible_resources": [
-  ]
+  ],
+  
+  "default_locale": "en"
 }
