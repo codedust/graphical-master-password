@@ -1,6 +1,7 @@
 $(function() {
   /* Misc Variables */
   var clickCount;
+  var clickCountMax;
   var plaintextPortfolio;
   var portfolioGroups;
   var userInput;
@@ -34,6 +35,7 @@ $(function() {
   
   function prepareLogin() {
     clickCount = 0;
+    clickCountMax = 0;
     userInput = [];
     showLoginGallery(portfolioGroups[0]);
   }
@@ -41,6 +43,7 @@ $(function() {
   function showSetupImage(image) {
     // update the click count
     clickCount = image;
+    clickCountMax = Math.max(clickCount, clickCountMax);
 
     // update the text
     $('#container .view#setupSteps span.currentStep').text(clickCount + 1);
@@ -54,17 +57,29 @@ $(function() {
       finishButton.removeClass('hidden');
     }
 
-    if (clickCount >= Config.NUM_IMAGE_GROUPS_PER_PORTFOLIO - 1) {
-      $('#container .view#setupSteps .nextButton').addClass('secondary');
+    if (clickCount == clickCountMax) {
+      nextButton.prop('disabled', true);
+
+      if (clickCount < Config.NUM_IMAGE_GROUPS_PER_PORTFOLIO - 1) {
+        nextButton.removeClass('animateToActive');
+        window.setTimeout(function(){
+          nextButton.addClass('animateToActive');
+        }, 1);
+        window.setTimeout(function(){
+          nextButton.prop('disabled', false);
+        }, 3000);
+      }
     } else {
-      $('#container .view#setupSteps .nextButton').removeClass('secondary');
+      nextButton.prop('disabled', false);
+      nextButton.removeClass('animateToActive');
     }
 
-
-    if (clickCount <= 1) {
-      $('#container .view#setupSteps .previousButton').addClass('secondary');
+    if (clickCount <= 0) {
+      previousButton.prop('disabled', true);
+      previousButton.addClass('gray');
     } else {
-      $('#container .view#setupSteps .previousButton').removeClass('secondary');
+      previousButton.prop('disabled', false);
+      previousButton.removeClass('gray');
     }
 
     // update the image
@@ -184,7 +199,9 @@ $(function() {
   // === setup ===
   
   $('#container .view#setup .startButton').click(function() {
-    showSetupImage(0);
+    clickCount = 0;
+    clickCountMax = 0;
+    showSetupImage(clickCount);
     setActiveView('setupSteps');
   });
 
