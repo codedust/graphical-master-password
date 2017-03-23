@@ -25,7 +25,7 @@
   },
 
   "setupRequiredExplanationCont": {
-    "message": " Bildern für Sie angezeigt werden. Aus diesen Bildern setzt sich das grafische Passwort zusammen. Merken Sie sich gut!",
+    "message": " Bildern für Sie angezeigt werden. Aus diesen Bildern setzt sich das grafische Passwort zusammen. Merken Sie sich die Bilder gut!",
     "description": "Second part of setup explanation."
   },
   
@@ -40,7 +40,7 @@
   },
 
   "setupStepsHeadlineMiddle": {
-    "message": " von ",
+    "message": "/",
     "description": "Left part of Headline for setup steps."
   },
   
