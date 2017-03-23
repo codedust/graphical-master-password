@@ -30,16 +30,16 @@
 			</div>
 		</div>
 		<div class="view" id="setupComplete">
-			<h1>Setup Complete</h1>
+			<h1>{{setupCompleteHeadline}}</h1>
 			<div>
-				<p>Whenever you log in, you will be presented with <span class="numStepsPerLogin"></span> random image galleries. Each gallery will contain one of the images from your graphical password. Click on each of these images to authenticate yourself.</p>
+				<p>{{setupCompleteExplanation}}<span class="numStepsPerLogin"></span> random image galleries. Each gallery will contain one of the images from your graphical password. Click on each of these images to authenticate yourself.</p>
 			</div>
 			<div>
-				<button class="loginButton blue">Login Now</button>
+				<button class="loginButton blue">{{setupCompleteLoginButtonLabel}}</button>
 			</div>
 		</div>
 		<div class="view" id="login">
-			<h1>Enter Password</h1>
+			<h1>{{LoginHeadline}}</h1>
 			<div class="passwordGallery">
 				<div>
 					<img /><img /><img /><img />
@@ -55,16 +55,16 @@
 				</div>
 			</div>
 			<div>
-				<button class="forgotPasswordButton blue">I forgot my password</button>
+				<button class="forgotPasswordButton blue">{{loginForgotPasswordButtonLabel}}</button>
 			</div>
 		</div>
 		<div class="view" id="loginFailed">
-			<h1>Login Failed</h1>
+			<h1>{{loginFailedHeadline}}</h1>
 			<div>
-				<p>Oh no! You got it wrong somewhere.</p>
+				<p>{{loginFailedExplanation}}</p>
 			</div>
 			<div>
-				<button class="loginButton blue">Try Again</button>
+				<button class="loginButton blue">{{loginFailedLoginButtonLabel}}</button>
 			</div>
 		</div>
 		<div class="view" id="loggedIn">

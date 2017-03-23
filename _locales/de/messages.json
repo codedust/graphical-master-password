@@ -67,6 +67,51 @@
   "setupStepsFinishButtonLabel": {
     "message": "Fertig",
     "description": "Label for the setup steps finish button."
+  },
+  
+  "setupCompleteHeadline": {
+    "message": "Einrichtung abgeschlossen",
+    "description": "Headline for the setup complete notification."
+  },
+  
+  "setupCompleteExplanation": {
+    "message": "Jedes Mal beim einloggen werden Ihnen ",
+    "description": "Explanation when setup is complete, first part."
+  },
+  
+  "setupCompleteExplanationCont": {
+    "message": " zufällig gewählte Bildgalerien gezeigt werden. Jede Galerie wird ein Bild enthalten, das zu Ihrem grafischen Passwort gehört. Klicken Sie auf jedes dieser Bilder um sich zu autentifizieren.",
+    "description": "Explanation when setup is complete, second part."
+  },
+  
+  "setupCompleteLoginButtonLabel": {
+    "message": "Jetzt einloggen",
+    "description": "Label for the setup complete login button."
+  },
+  
+  "loginHeadline": {
+    "message": "Passwort eingeben",
+    "description": "Headline for the login dialog."
+  },
+  
+  "loginForgotPasswordButtonLabel": {
+    "message": "Passwort vergessen",
+    "description": "Label for the forgot password button of the login dialog."
+  },
+  
+  "loginFailedHeadline": {
+    "message": "Login fehlgeschlagen",
+    "description": "Headline for the login failed dialog."
+  },
+      
+  "loginFailedExplanation": {
+    "message": "Oh nein, da ist irgendwo etwas schiefgelaufen.",
+    "description": "Explanation for login failed dialog."
+  },
+    
+  "loginFailedLoginButtonLabel": {
+    "message": "Erneut versuchen",
+    "description": "Label for the login button of the login failed dialog."
   }
   
 }
