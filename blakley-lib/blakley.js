@@ -24,11 +24,8 @@ var blakley = (function() {
   numberOfImagesPerGroup = 16; // the number of images in each group
   portfolioSize = 10;          // the number of image groups chosen for the users
                                // portfolio
-  authenticationRatio = 2/3;   // The proportion of the portfolio (rounded up) that
-                               // has to be entered during each authentication attempt
-
-  // TODO: this should be configurable
-  authenticationSize = 5;//Math.ceil(portfolioSize * authenticationRatio);
+  authenticationSize = 5;      // The number of images of the portfolio that has
+                               // to be entered during each authentication attempt
 
   t = authenticationSize;
   n = portfolioSize;
@@ -316,8 +313,6 @@ var blakley = (function() {
   function New(plaintextPortfolio) {
     return new Promise(function(resolve, reject){
       // The parameter p is chosen according to section 5.2 in the paper
-
-      // TODO: use parameters here
       var p = new BigInteger(nextPrime(Math.pow(16, 7) * 2));
 
       // a randomly choosen salt used for hashing
