@@ -18,7 +18,7 @@ $(function() {
   	});
 
     var translationReplacements = {};
-    var translationRegex = ''
+    var translationRegex = '';
 
 	// build replacement map
 	for (var i = 0; i < translationTemplates.length; i++) {
@@ -288,6 +288,11 @@ $(function() {
 
   $('#container .view#changePassword .resetImageGroupButton').click(function() {
     browser.runtime.sendMessage({"action": "changePortfolio", "data": plaintextPortfolio[clickCount][0]});
+
+    $(this).prop('disabled', true);
+    window.setTimeout(function(){
+      $('#container .view#changePassword .resetImageGroupButton').prop('disabled', false);
+    }, 1000);
   });
 
   $('#container .view#changePassword .cancelButton').click(function() {
