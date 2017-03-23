@@ -11,22 +11,22 @@
 			<h1>{{setupRequiredHeadline}}</h1>
 			<div>
 				<p>{{setupRequiredStatus}}</p>
-				<p>Once you are ready, a sequence of <span class="numImageGroups"></span> images will be presented to you. These images will make up your graphical password. Memorize them well!</p>
+				<p>{{setupRequiredExplanation}}<span class="numImageGroups"></span>{{setupRequiredExplanationCont}}</p>
 			</div>
 			<div>
-				<button class="startButton">I'm ready</button>
+				<button class="startButton">{{setupRequiredStartButtonLabel}}</button>
 			</div>
 		</div>
 		<div class="view" id="setupSteps">
-			<h1>Setup (Step <span class="currentStep"></span> of <span class="numImageGroups"></span>)</h1>
+			<h1>{{SetupStepsHeadlineLeft}}<span class="currentStep"></span>{{SetupStepsHeadlineMiddle}}<span class="numImageGroups"></span>{{SetupStepsHeadlineRight}}</h1>
 			<div class="passwordDisplay">
 				<img />
 			</div>
 			<div class="buttonbox">
-				<button class="previousButton small">Previous</button>
-				<button class="warn cancelButton small">Cancel</button>
-				<button class="nextButton small">Next</button>
-				<button class="hidden highlight finishButton">Finish</button>
+				<button class="previousButton small">{{setupStepsPreviousButtonLabel}}</button>
+				<button class="warn cancelButton small">{{setupStepsCancelButtonLabel}}</button>
+				<button class="nextButton small">{{setupStepsNextButtonLabel}}</button>
+				<button class="hidden highlight finishButton">{{setupStepsFinishButtonLabel}}</button>
 			</div>
 		</div>
 		<div class="view" id="setupComplete">

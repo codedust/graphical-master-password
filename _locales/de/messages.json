@@ -10,13 +10,63 @@
   },
 
   "setupRequiredHeadline": {
-    "message": "Einrichtung Erforderlich",
+    "message": "Einrichtung erforderlich",
     "description": "Headline for the initial setup dialog."
   },
   
   "setupRequiredStatus": {
     "message": "Es wurde noch kein grafisches Passwort festgelegt.",
     "description": "Headline for the initial setup dialog."
-  }  
+  },
+  
+  "setupRequiredExplanation": {
+    "message": "Sobald Sie bereit sind, wird eine Folge von ",
+    "description": "First part of setup explanation."
+  },
+
+  "setupRequiredExplanationCont": {
+    "message": " Bildern für Sie angezeigt werden. Aus diesen Bildern setzt sich das grafische Passwort zusammen. Merken Sie sich gut!",
+    "description": "Second part of setup explanation."
+  },
+  
+  "setupRequiredStartButtonLabel": {
+    "message": "Ich bin bereit",
+    "description": "Label for the setup start button."
+  },
+  
+  "setupStepsHeadlineLeft": {
+    "message": "Einrichtung (Schritt ",
+    "description": "Left part of Headline for setup steps."
+  },
+
+  "setupStepsHeadlineMiddle": {
+    "message": " von ",
+    "description": "Left part of Headline for setup steps."
+  },
+  
+  "setupStepsHeadlineRight": {
+    "message": ")",
+    "description": "Left part of Headline for setup steps."
+  },
+  
+  "setupStepsPreviousButtonLabel": {
+    "message": "Zurück",
+    "description": "Label for the setup steps previous button."
+  },
+  
+  "setupStepsCancelButtonLabel": {
+    "message": "Abbrechen",
+    "description": "Label for the setup steps cancel button."
+  },
+
+  "setupStepsNextButtonLabel": {
+    "message": "Weiter",
+    "description": "Label for the setup steps next button."
+  },
+
+  "setupStepsFinishButtonLabel": {
+    "message": "Fertig",
+    "description": "Label for the setup steps finish button."
+  }
   
 }

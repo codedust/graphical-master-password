@@ -17,6 +17,56 @@
   "setupRequiredStatus": {
     "message": "You have not set up a graphical password yet.",
     "description": "Headline for the initial setup dialog."
-  }
+  },
+  
+  "setupRequiredExplanation": {
+    "message": "Once you are ready, a sequence of ",
+    "description": "First part of setup explanation."
+  },
 
+  "setupRequiredExplanationCont": {
+    "message": " images will be presented to you. These images will make up your graphical password. Memorize them well!",
+    "description": "Second part of setup explanation."
+  },
+  
+  "setupRequiredStartButtonLabel": {
+    "message": "I'm ready",
+    "description": "Label for the setup start button."
+  },
+  
+  "setupStepsHeadlineLeft": {
+    "message": "Setup (Step ",
+    "description": "Left part of Headline for setup steps."
+  },
+
+  "setupStepsHeadlineMiddle": {
+    "message": " of ",
+    "description": "Left part of Headline for setup steps."
+  },
+  
+  "setupStepsHeadlineRight": {
+    "message": ")",
+    "description": "Left part of Headline for setup steps."
+  },
+  
+  "setupStepsPreviousButtonLabel": {
+    "message": "Previous",
+    "description": "Label for the setup steps previous button."
+  },
+  
+  "setupStepsCancelButtonLabel": {
+    "message": "Cancel",
+    "description": "Label for the setup steps cancel button."
+  },
+
+  "setupStepsNextButtonLabel": {
+    "message": "Next",
+    "description": "Label for the setup steps next button."
+  },
+
+  "setupStepsFinishButtonLabel": {
+    "message": "Finish",
+    "description": "Label for the setup steps finish button."
+  }
+  
 }
