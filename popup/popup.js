@@ -5,34 +5,34 @@ $(function() {
   var plaintextPortfolio;
   var portfolioGroups;
   var userInput;
-  
+
   /* Helper Functions */
   function applyInternationalization() {
     var containerHTML = document.getElementById('container').innerHTML;
-	
+
 	// find templates wrapped in {{..}}
     var translationTemplates = containerHTML
   	.match(/{{\s*[\w\.]+\s*}}/g)
   	.map(function(x) {
   		return x.match(/[\w\.]+/)[0];
   	});
-  
+
     var translationReplacements = {};
     var translationRegex = ''
-    
+
 	// build replacement map
 	for (var i = 0; i < translationTemplates.length; i++) {
   	var templateId = '{{' + translationTemplates[i] + '}}';
   	  translationReplacements[templateId] = browser.i18n.getMessage(translationTemplates[i]);
   	  translationRegex += (translationRegex.length > 0 ? '|' : '') + templateId;
     }
-    
+
 	// replace in one go
     document.getElementById('container').innerHTML = containerHTML.replace(new RegExp(translationRegex, 'g'), function(matched){
       return translationReplacements[matched];
-    });	
+    });
   }
-  
+
   function prepareLogin() {
     clickCount = 0;
     clickCountMax = 0;
@@ -57,7 +57,14 @@ $(function() {
       finishButton.removeClass('hidden');
     }
 
-    if (clickCount == clickCountMax) {
+    if (clickCount == Config.NUM_IMAGE_GROUPS_PER_PORTFOLIO - 1) {
+      nextButton.prop('disabled', true);
+      nextButton.addClass('gray');
+    } else if (clickCount < clickCountMax) {
+      nextButton.prop('disabled', false);
+      nextButton.removeClass('gray');
+      nextButton.removeClass('animateToActive');
+    } else if (clickCount == clickCountMax) {
       nextButton.prop('disabled', true);
 
       if (clickCount < Config.NUM_IMAGE_GROUPS_PER_PORTFOLIO - 1) {
@@ -142,7 +149,7 @@ $(function() {
   }
 
   /* Initialization */
-  
+
   applyInternationalization();
 
   $('#container span.numStepsPerLogin').text(Config.NUM_IMAGE_GROUPS_PER_LOGIN);
@@ -197,7 +204,7 @@ $(function() {
   /* Event Handling */
 
   // === setup ===
-  
+
   $('#container .view#setup .startButton').click(function() {
     clickCount = 0;
     clickCountMax = 0;
