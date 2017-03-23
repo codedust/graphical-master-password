@@ -127,6 +127,8 @@ $(function() {
   }
 
   /* Initialization */
+  
+  applyInternationalization();
 
   $('#container span.numStepsPerLogin').text(Config.NUM_IMAGE_GROUPS_PER_LOGIN);
   $('#container span.numImageGroups').text(Config.NUM_IMAGE_GROUPS_PER_PORTFOLIO);
@@ -181,8 +183,6 @@ $(function() {
 
   // === setup ===
   
-  applyInternationalization();
-
   $('#container .view#setup .startButton').click(function() {
     showSetupImage(0);
     setActiveView('setupSteps');
