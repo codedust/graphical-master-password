@@ -68,26 +68,26 @@
 			</div>
 		</div>
 		<div class="view" id="loggedIn">
-			<h1>Logged In</h1>
+			<h1>{{loggedInHeadline}}</h1>
 			<div>
-				<p>You've been successfully logged in!</p>
-				<p>Firefox is now able to access your passwords stored in the password manager.</p>
+				<p>{{loggedInExplanation}}</p>
+				<p>{{loggedInExplanationCont}}</p>
 			</div>
 			<div>
-				<button class="changePasswordButton blue">Change Password</button>
-				<button class="green logoutButton">Logout</button>
+				<button class="changePasswordButton blue">{{loggedInChangePasswordButtonLabel}}</button>
+				<button class="green logoutButton">{{loggedInLogoutButtonLabel}}</button>
 			</div>
 		</div>
 		<div class="view" id="forgotPassword">
-			<h1>Reset Password</h1>
+			<h1>{{resetPasswordHeadline}}</h1>
 			<div>
-				<p>Warning! All saved passwords will be lost if you reset your graphical master password!</p>
+				<p>{{resetPasswordExplanation}}</p>
 			</div>
 			<div>
-				<button class="red resetPasswordButton">I know about the consequences.<br>Reset my Password</button>
+				<button class="red resetPasswordButton">{{resetPasswordConfirmButtonLabel}}<br>{{resetPasswordConfirmButtonLabelCont}}</button>
 			</div>
 			<div>
-				<button class="okButton green">Cancel</button>
+				<button class="okButton green">{{resetPasswordCancelButtonLabel}}</button>
 			</div>
 		</div>
 		<div class="view" id="changePassword">

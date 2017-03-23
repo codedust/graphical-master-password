@@ -112,5 +112,56 @@
   "loginFailedLoginButtonLabel": {
     "message": "Try Again",
     "description": "Label for the login button of the login failed dialog."
+  },
+  
+  "loggedInHeadline": {
+    "message": "Logged In",
+    "description": "Headline for the logged in dialog."
+  },
+      
+  "loggedInExplanation": {
+    "message": "You've been successfully logged in!",
+    "description": "Explanation for logged in dialog, part 1."
+  },
+      
+  "loggedInExplanationCont": {
+    "message": "Firefox is now able to access your passwords stored in the password manager.",
+    "description": "Explanation for logged in dialog, part 1."
+  },
+  
+  "loggedInChangePasswordButtonLabel": {
+    "message": "Change Password",
+    "description": "Label for the change password button of the logged in dialog."
+  },
+  
+  "loggedInLogoutButtonLabel": {
+    "message": "Logout",
+    "description": "Label for the logout button of the logged in dialog."
+  },
+    
+  "resetPasswordHeadline": {
+    "message": "Reset Password",
+    "description": "Headline for the reset password dialog."
+  },
+      
+  "resetPasswordExplanation": {
+    "message": "Warning! All saved passwords will be lost if you reset your graphical master password!",
+    "description": "Explanation for the reset password dialog."
+  },
+  
+  "resetPasswordConfirmButtonLabel": {
+    "message": "I'm aware of the consequences.",
+    "description": "Label for the confirm button of the reset password dialog, part 1."
+  },
+  
+  "resetPasswordConfirmButtonLabelCont": {
+    "message": "Reset my Password",
+    "description": "Label for the confirm button of the reset password dialog, part 2."
+  },
+      
+  "resetPasswordCancelButtonLabel": {
+    "message": "Cancel",
+    "description": "Label for the cancel button of the reset password dialog."
   }
+
 }
