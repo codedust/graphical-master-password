@@ -40,7 +40,7 @@ $(function() {
     showLoginGallery(portfolioGroups[0]);
   }
 
-  function showSetupImage(image) {
+  function showSetupImage(image) {	  
     // update the click count
     clickCount = image;
     clickCountMax = Math.max(clickCount, clickCountMax);
@@ -109,9 +109,7 @@ $(function() {
 
   function showChangePasswordGallery(groupIndex) {
     // update the click count
-    if (groupIndex >= 0) {
-      clickCount = groupIndex;
-    }
+    clickCount = groupIndex >= 0 ? groupIndex : 0;
 
     // update the text
     $('#container .view#changePassword span.currentStep').text(clickCount + 1);
@@ -119,23 +117,24 @@ $(function() {
     // update the buttons
     var nextButton = $('#container .view#changePassword > div > button.nextButton');
     var previousButton = $('#container .view#changePassword > div > button.previousButton');
-    //var resetButton = $('#container .view#changePassword > div > button.resetImageGroupButton');
     var finishButton = $('#container .view#changePassword > div > button.finishButton');
 
-    if (clickCount === 0) {
-      previousButton.addClass('hidden');
-    } else {
-      previousButton.removeClass('hidden');
-    }
+	if (clickCount <= 0) {
+		previousButton.prop('disabled', true);
+        previousButton.addClass('gray');
+ 	} else if (previousButton.prop('disabled')) {
+		previousButton.prop('disabled', false);
+        previousButton.removeClass('gray');
+	}
 
-    if (clickCount + 1 < Config.NUM_IMAGE_GROUPS_PER_PORTFOLIO) {
-      nextButton.removeClass('hidden');
-      finishButton.addClass('hidden');
-    } else {
-      nextButton.addClass('hidden');
-      finishButton.removeClass('hidden');
-    }
-
+	if (clickCount >= Config.NUM_IMAGE_GROUPS_PER_PORTFOLIO - 1) {
+		nextButton.prop('disabled', true);
+        nextButton.addClass('gray');
+ 	} else if (nextButton.prop('disabled')) {
+		nextButton.prop('disabled', false);
+        nextButton.removeClass('gray');
+	}
+	
     // update the image
     groupId = plaintextPortfolio[clickCount][0];
     var itemId = plaintextPortfolio[clickCount][1];
@@ -145,7 +144,7 @@ $(function() {
 
   function setActiveView(viewId) {
     $('.view').removeClass('active');
-    $('.view#' + viewId).addClass('active');
+    $('.view#' + viewId).addClass('active');	
   }
 
   /* Initialization */
