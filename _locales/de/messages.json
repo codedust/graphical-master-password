@@ -75,7 +75,7 @@
   },
   
   "setupCompleteExplanation": {
-    "message": "Jedes Mal beim einloggen werden Ihnen ",
+    "message": "Jedes Mal beim Einloggen werden Ihnen ",
     "description": "Explanation when setup is complete, first part."
   },
   
@@ -145,7 +145,7 @@
   },
       
   "resetPasswordExplanation": {
-    "message": "Achtung: Alle gespeicherten Passwörter gehen verloren beim Zurücksetzen des grafischen Master-Passworts verloren!",
+    "message": "Achtung: Alle gespeicherten Passwörter gehen beim Zurücksetzen des grafischen Master-Passworts verloren!",
     "description": "Explanation for the reset password dialog."
   },
   
@@ -170,7 +170,7 @@
   },
       
   "changePasswordExplanation": {
-    "message": "Bitte wählen Sie eine Bildergalerie, die Sie ersetzen möchen. Oder schauen Sie sich einfach die möglichen Login-Bilder ihres Passworts an.",
+    "message": "Bitte wählen Sie eine Bildergalerie, die Sie ersetzen möchen. Oder schauen Sie sich einfach ihre Passwortbilder an.",
     "description": "Explanation for the change password dialog."
   },
   

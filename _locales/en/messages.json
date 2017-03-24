@@ -145,7 +145,7 @@
   },
       
   "resetPasswordExplanation": {
-    "message": "Warning! All saved passwords will be lost if you reset your graphical master password!",
+    "message": "Warning! All saved passwords will be lost when your graphical master password is reset!",
     "description": "Explanation for the reset password dialog."
   },
   
