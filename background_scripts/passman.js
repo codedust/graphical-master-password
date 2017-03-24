@@ -114,24 +114,36 @@
   // this function decrypts a single password
   //
   function decryptPassword(login, secret) {
+    console.log("[decryptPassword]", login, secret);
     return new Promise(function(resolve, reject){
       var cryptoData = login.password.split('|');
       if (cryptoData[0] != blakleyPasswordPrefix) {
+        console.log("[decryptPassword] Password was not encrypted", login);
         resolve({login: login, cleartext: login.password}); // password is not encrypted
       }
+
+      console.log("[decryptPassword] Decrypting password");
 
       // we add 42 to our secret because hash(secret) is publicly known, but
       // hash(secret + 42) is not
       var secretUint8Array = blakley.bigIntegerToUint8Array(new BigInteger(secret).add(42));
       crypto.subtle.digest('SHA-256', secretUint8Array).then(pwHash => {
+        console.log("pwhash", pwHash);
         var ctBuffer = blakley.bigIntegerToUint8Array(new BigInteger(cryptoData[1]));
         var iv = blakley.bigIntegerToUint8Array(new BigInteger(cryptoData[2]));
         var alg = { name: 'AES-GCM', iv: iv };
 
         crypto.subtle.importKey('raw', pwHash, alg, false, ['decrypt']).then(key => {
+          console.log("key", key);
           crypto.subtle.decrypt(alg, key, ctBuffer).then(ctRaw => {
+            console.log("ctraw", ctRaw);
             var pwRaw = new TextDecoder().decode(ctRaw);
+            console.log("[decryptPassword] Decrypting done.", login, pwRaw);
             resolve({login: login, cleartext: pwRaw});
+          }, function() {
+            // password has be destroyed during password reset
+            console.log("Password has been destroyed during password reset.");
+            resolve({login: login, cleartext: ""});
           });
         });
       });
@@ -174,6 +186,8 @@
   // secret
   //
   function encryptPasswords() {
+    console.log("[encryptPasswords] start");
+
     if (!loginSuccessful()) {
       throw new Error("Passwords could not be encrypted because login was not successful!");
     }
@@ -184,6 +198,7 @@
       browser.logins.search({}).then(function(data) {
         for (var i = 0; i < data.length; i++) {
           var currentLogin = data[i];
+          console.log("[encryptPasswords]", currentLogin);
           var promise = encryptPassword(currentLogin, self.secret).then(result => {
             currentLogin = result.login;
             browser.logins.remove(currentLogin);
@@ -195,6 +210,7 @@
         }
 
         Promise.all(promises).then(() => {
+          console.log("[encryptPasswords] done");
           resolve();
         });
       });
@@ -202,6 +218,8 @@
   }
 
   function decryptPasswords() {
+    console.log("[decryptPasswords] start");
+
     if (!loginSuccessful()) {
       throw new Error("Passwords could not be encrypted because login was not successful!");
     }
@@ -212,10 +230,11 @@
       browser.logins.search({}).then(function(data) {
         for (var i = 0; i < data.length; i++) {
           var currentLogin = data[i];
+          console.log("[decryptPasswords]", currentLogin);
           var promise = decryptPassword(currentLogin, self.secret).then(result => {
             currentLogin = result.login;
             browser.logins.remove(currentLogin);
-            currentLogin.username = blakleyPasswordPrefix + result.login.username.replace(blakleyPasswordPrefix, '');
+            currentLogin.username = result.login.username.replace(blakleyPasswordPrefix, '');
             currentLogin.password = result.cleartext;
             browser.logins.store(currentLogin);
           });
@@ -223,6 +242,7 @@
         }
 
         Promise.all(promises).then(() => {
+          console.log("[decryptPasswords] done.");
           resolve();
         });
       });

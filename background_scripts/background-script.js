@@ -41,8 +41,8 @@ browser.runtime.onMessage.addListener(function(message) {
             "status": "loginSuccessful",
             "data": plaintextPortfolio
           });
+          PassMan.decryptPasswords();
         });
-        PassMan.decryptPasswords();
       }, function(){
         browser.tabs.sendMessage(0, { "action": "loginFailed" });
       });
