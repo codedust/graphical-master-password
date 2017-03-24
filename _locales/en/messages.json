@@ -162,6 +162,51 @@
   "resetPasswordCancelButtonLabel": {
     "message": "Cancel",
     "description": "Label for the cancel button of the reset password dialog."
+  },
+        
+  "changePasswordHeadline": {
+    "message": "Change Password",
+    "description": "Headline for the change password dialog."
+  },
+      
+  "changePasswordExplanation": {
+    "message": "Please choose the image you would like to replace or simply have another look at your login images.",
+    "description": "Explanation for the change password dialog."
+  },
+  
+  "changePasswordSubHeadlineLeft": {
+    "message": "Gallery ",
+    "description": "Left sub headline of the change password dialog."
+  },
+
+  "changePasswordSubHeadlineMiddle": {
+    "message": " of ",
+    "description": "Middle sub headline of the change password dialog."
+  },
+  
+  "changePasswordSubHeadlineRight": {
+    "message": "",
+    "description": "Right sub headline of the change password dialog."
+  },
+
+  "changePasswordReplaceGalleryButtonLabel": {
+    "message": "Replace this image gallery",
+    "description": "Label for the change password replace gallery button."
+  },
+  
+  "changePasswordPreviousButtonLabel": {
+    "message": "Previous",
+    "description": "Label for the change password previous button."
+  },
+  
+  "changePasswordNextButtonLabel": {
+    "message": "Next",
+    "description": "Label for the change password next button."
+  },
+
+  "changePasswordFinishButtonLabel": {
+    "message": "Finish",
+    "description": "Label for the setup change password finish button."
   }
 
 }

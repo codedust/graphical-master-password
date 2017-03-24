@@ -32,7 +32,7 @@
 		<div class="view" id="setupComplete">
 			<h1>{{setupCompleteHeadline}}</h1>
 			<div>
-				<p>{{setupCompleteExplanation}}<span class="numStepsPerLogin"></span> random image galleries. Each gallery will contain one of the images from your graphical password. Click on each of these images to authenticate yourself.</p>
+				<p>{{setupCompleteExplanation}}<span class="numStepsPerLogin"></span>{{setupCompleteExplanationCont}}</p>
 			</div>
 			<div>
 				<button class="loginButton blue">{{setupCompleteLoginButtonLabel}}</button>
@@ -91,19 +91,19 @@
 			</div>
 		</div>
 		<div class="view" id="changePassword">
-			<h1>Change password</h1>
+			<h1>{{changePasswordHeadline}}</h1>
 			<div>
-				<p>Please choose the image you would like to replace or simply have another look at your login images.</p>
-				<span class="groupCounter">Gallery <span class="currentStep"></span> of <span class="numImageGroups"></span></span>
+				<p>{{changePasswordExplanation}}</p>
+				<span class="groupCounter">{{changePasswordSubHeadlineLeft}}<span class="currentStep"></span>{{changePasswordSubHeadlineMiddle}}<span class="numImageGroups"></span>{{changePasswordSubHeadlineRight}}</span>
 				<div class="passwordDisplay">
 					<img />
 				</div>
 			</div>
 			<div class="buttonbox">
-				<button class="red resetImageGroupButton">Replace this image gallery</button>
-				<button class="previousButton small blue">Previous</button>
-				<button class="green cancelButton small">Finish</button>
-				<button class="nextButton small blue">Next</button>
+				<button class="red resetImageGroupButton">{{changePasswordReplaceGalleryButtonLabel}}</button>
+				<button class="previousButton small blue">{{changePasswordPreviousButtonLabel}}</button>
+				<button class="green cancelButton small">{{changePasswordCancelButtonLabel}}</button>
+				<button class="nextButton small blue">{{changePasswordNextButtonLabel}}</button>
 			</div>
 		</div>
 	</div>
