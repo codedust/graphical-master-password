@@ -10,6 +10,11 @@
 
   "permissions": ["experiments.logins", "logins", "<all_urls>"],
 
+  "options_ui" : {
+    "page": "wizard/wizard.html",
+    "open_in_tab": true
+  },
+
   "background": {
     "scripts": [
       "config.js",
@@ -29,6 +34,6 @@
 
   "web_accessible_resources": [
   ],
-  
+
   "default_locale": "en"
 }

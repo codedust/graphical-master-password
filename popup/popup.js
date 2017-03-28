@@ -107,10 +107,7 @@ $(function() {
       case "portfolioStatus":
         switch (message.status) {
           case "setup":
-            browser.tabs.create({
-              active: true,
-              url: "/wizard/wizard.html"
-            });
+            browser.runtime.openOptionsPage();
             window.close();
             break;
           case "login":

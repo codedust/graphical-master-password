@@ -1,9 +1,6 @@
 /*jshint esversion: 6 */
 
-var creating = browser.tabs.create({
-  active: true,
-  url: "/wizard/wizard.html"
-});
+browser.runtime.openOptionsPage();
 
 browser.runtime.onMessage.addListener(function(message) {
   console.log("->", message);
