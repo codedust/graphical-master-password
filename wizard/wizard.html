@@ -10,11 +10,35 @@
 		<div class="view" id="help">
 			<h1>Willkommen!</h1>
 			<section>
-				<p>TODO: explanation what this addon does.</p>
+				<p>This addon protects your credentials, stored in the Firefox password
+				manager by encrypting them with a graphical master password. A graphical
+				password consists of a number images that have to be memorized. Only the
+				person who knows of which images the password consists of is able to
+				login.</p>
+				<p>This technique also provides some nice advantages against traditional
+				passwords. First, a graphical password is much easier to remember
+				because it makes use of the vast human capacity to store and process
+				visual information. During each login attempt, some - but not all - of
+				the images the password consists of have to be selected. This makes it
+				especially hard for an adversary to steal your login credentials.</p>
 			</section>
 			<section>
-				<p>TODO: explanation what this addon does.</p>
+				<img src="setup_en.png"/>
+				<p>This addon will display a number of images in the next step. We call
+				these images the <i>familiar information</i>. These images will make up
+				your password. Remember them well!</p>
 			</section>
+			<span style="clear: both;"></span>
+			<section>
+				<img src="enter_password_en.png"/>
+				<p>Multiple grids of images will later be shown in the authentication
+				phase where excactly one image per grid is part of the </i>familiar
+				information</i>. You will have to point out the one image that was shown
+				in the setup phase before. In this example, out of the 16 fruits, the
+				kiwi fruit (first image in the third row) would be the correct image.</p>
+				<!--<p>{{setupCompleteExplanation}}<span class="numStepsPerLogin"></span>{{setupCompleteExplanationCont}}</p>-->
+			</section>
+			<span style="clear: both;"></span>
 			<button class="setupButton blue">I understood.</button>
 		</div>
 		<div class="view" id="setup">
@@ -39,10 +63,13 @@
 		</div>
 		<div class="view" id="setupComplete">
 			<h1>{{setupCompleteHeadline}}</h1>
-			<div>
-				<p>{{setupCompleteExplanation}}<span class="numStepsPerLogin"></span>{{setupCompleteExplanationCont}}</p>
-				<p>TODO: Show explanation how to login (-> popup)</p>
-			</div>
+			<section>
+				<img src="icon_click.png"/>
+				<p>Fertig! Die Einrichtung des graphischen Passwortes ist abgeschlossen.
+				Um Dich zu authentifizieren, klicke auf das Icon neben der Adresszeile
+				deines Browsers.</p>
+			</section>
+			<button class="helpButton blue">Weitere Informationen zeigen</button>
 		</div>
 	</div>
 	<script src="../popup/jquery-3.1.1.min.js" type="text/javascript"></script>

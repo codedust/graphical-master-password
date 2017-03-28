@@ -20,13 +20,13 @@ browser.runtime.onMessage.addListener(function(message) {
           setActiveView('help');
           break;
         case "login":
-          setActiveView('help');
+          setActiveView('setupComplete');
           break;
         case "loginSuccessful":
-          setActiveView('help');
+          setActiveView('setupComplete');
           break;
         case "change":
-          setActiveView('help');
+          setActiveView('setupComplete');
           break;
         default:
           console.log("Unknown portfolio state:", message);
@@ -36,10 +36,10 @@ browser.runtime.onMessage.addListener(function(message) {
     case "setupSuccessful":
       portfolioGroups = message.data;
       plaintextPortfolio = null;
-      setActiveView('help');
+      setActiveView('setupComplete');
       break;
     case "loginFailed":
-      setActiveView('help');
+      setActiveView('setupComplete');
       break;
     case "requestPortfolioStatus": // ignore
       break;
@@ -67,7 +67,6 @@ $('#container .view#setup .startButton').click(function() {
   setActiveView('setupSteps');
 });
 
-// === setupSteps ===
 $('#container .view#setupSteps .cancelButton').click(function() {
   setActiveView('setup');
 });
@@ -88,6 +87,10 @@ $('#container .view#setupSteps .previousButton').click(function() {
 
 $('#container .view#setupSteps .finishButton').click(function() {
   browser.runtime.sendMessage({"action": "savePortfolio"});
+});
+
+$('#container .view#setupComplete .helpButton').click(function() {
+  setActiveView('help');
 });
 
 
