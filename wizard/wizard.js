@@ -1,6 +1,6 @@
 var clickCount = 0;
 var clickCountMax = 0;
-var plaintextPortfolio = 0;
+var plaintextPortfolio = null;
 
 applyInternationalization();
 
@@ -17,16 +17,16 @@ browser.runtime.onMessage.addListener(function(message) {
         case "setup":
           plaintextPortfolio = message.data;
           portfolioGroups = null;
-          setActiveView('setup');
+          setActiveView('help');
           break;
         case "login":
-          setActiveView('setupComplete');
+          setActiveView('help');
           break;
         case "loginSuccessful":
-          setActiveView('setupComplete');
+          setActiveView('help');
           break;
         case "change":
-          setActiveView('setupComplete');
+          setActiveView('help');
           break;
         default:
           console.log("Unknown portfolio state:", message);
@@ -36,10 +36,10 @@ browser.runtime.onMessage.addListener(function(message) {
     case "setupSuccessful":
       portfolioGroups = message.data;
       plaintextPortfolio = null;
-      setActiveView('setupComplete');
+      setActiveView('help');
       break;
     case "loginFailed":
-      setActiveView('setupComplete');
+      setActiveView('help');
       break;
     case "requestPortfolioStatus": // ignore
       break;
@@ -50,7 +50,16 @@ browser.runtime.onMessage.addListener(function(message) {
 
 // ===== Event handlers =====
 
-// === setup ===
+// === help ===
+$('#container .view#help .setupButton').click(function() {
+  console.log(plaintextPortfolio);
+  if (plaintextPortfolio !== null) {
+    setActiveView('setup');
+  } else {
+    setActiveView('setupComplete');
+  }
+});
+
 $('#container .view#setup .startButton').click(function() {
   clickCount = 0;
   clickCountMax = 0;
