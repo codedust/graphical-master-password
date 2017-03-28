@@ -1,4 +1,10 @@
 /*jshint esversion: 6 */
+
+var creating = browser.tabs.create({
+  active: true,
+  url: "/wizard/wizard.html"
+});
+
 browser.runtime.onMessage.addListener(function(message) {
   console.log("->", message);
   switch (message.action) {
@@ -67,7 +73,7 @@ browser.runtime.onMessage.addListener(function(message) {
     case "resetPortfolio":
       // let's reset the portfolio
       PassMan.removePortfolio();
-      PassMan.createPortfolio(null).then(function() {
+      PassMan.resetPortfolio().then(function() {
         PassMan.getPlaintextPortfolio().then(function(plaintextPortfolio){
           browser.tabs.sendMessage(0, {
             "action": "portfolioStatus",

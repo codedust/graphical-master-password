@@ -19,6 +19,12 @@
 
   function createPortfolio(plaintextPortfolio) {
     return new Promise(function(resolve, reject){
+      if (self.portfolio !== null && plaintextPortfolio === null) {
+        console.log("Skipping creation of new portfolio (portfolio already exists).");
+        resolve();
+        return;
+      }
+
       // let's generate a random portfolio
       if (!(plaintextPortfolio instanceof Array)) {
         plaintextPortfolio = blakley.generateRandomPortfolio(
@@ -34,6 +40,13 @@
         resolve();
       });
     });
+  }
+
+  function resetPortfolio() {
+    self.plaintextPortfolio = null;
+    self.portfolio = null;
+    self.secret = null;
+    return createPortfolio(null);
   }
 
   function getPlaintextPortfolio() {
@@ -365,6 +378,7 @@
 
   PassMan = {
     createPortfolio: createPortfolio,
+    resetPortfolio: resetPortfolio,
     changePortfolioGroup: changePortfolioGroup,
     getPlaintextPortfolio: getPlaintextPortfolio,
     portfolioInitialized: portfolioInitialized,

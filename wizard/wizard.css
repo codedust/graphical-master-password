@@ -1,0 +1,119 @@
+/* Styles for easy theming */
+
+body {
+  overflow-x: hidden;
+  background: #ccc;
+}
+
+#container {
+  font-family: Sans-serif, Arial;
+  max-width: 786px;
+  margin: auto;
+  padding: 1em 1.5em 1em 1em;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#container .buttonbox {
+  text-align: center;
+}
+
+#container button {
+  display: block;
+  width: 100%;
+  margin: 1% 0;
+  padding: 3% 4%;
+  opacity: 0.8;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+#container button.red {
+    background-color: #7a2e2a;
+}
+
+#container button.small {
+  display: inline-block;
+  width: 32%;
+}
+
+#container button.blue {
+  background: linear-gradient(to right, #53a7ea 50%, #3387ca 50%);
+  background-size: 200% auto;
+  background-position: 0% 0;
+}
+
+#container button.green {
+    background-color: #69b14e;
+}
+
+#container button.gray {
+    background: #bbb;
+}
+
+#container button:hover {
+  opacity: 1.0;
+}
+
+#container button:disabled {
+  opacity: 0.8;
+  cursor: default;
+}
+
+#container button.animateToActive {
+  transition: background-position 3s ease-in-out;
+  background-position: -100% 0;
+}
+
+#container h1 {
+  font-size: 1.5em;
+  font-weight: lighter;
+  margin: 0;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid #bbb;
+}
+
+#container p {
+  font-size: 1em;
+}
+
+#container .groupCounter {
+  float: right;
+  font-style: italic;
+  font-size: 0.75em;
+}
+
+#container h1 {
+  text-align: center;
+}
+
+#container p {
+  user-select: none;
+  text-align: justify;
+}
+
+#container .view {
+  display: none;
+}
+
+#container .view.active {
+  display: block;
+}
+
+#container .passwordDisplay {
+  text-align: center;
+}
+
+#container .passwordDisplay > img {
+  max-height: 400px;
+  margin: 1em;
+}
+
+#container .hidden {
+  display: none;
+}

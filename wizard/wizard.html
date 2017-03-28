@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Graphical Password Manager</title>
+	<link rel="stylesheet" href="wizard.css" type="text/css">
+</head>
+<body>
+	<div id="container">
+		<div class="view" id="setup">
+			<h1>{{setupRequiredHeadline}}</h1>
+			<div>
+				<p>{{setupRequiredStatus}}</p>
+				<p>{{setupRequiredExplanation}}<span class="numImageGroups"></span>{{setupRequiredExplanationCont}}</p>
+			</div>
+			<button class="startButton blue">{{setupRequiredStartButtonLabel}}</button>
+		</div>
+		<div class="view" id="setupSteps">
+			<h1>{{SetupStepsHeadlineLeft}}<span class="currentStep"></span>{{SetupStepsHeadlineMiddle}}<span class="numImageGroups"></span>{{SetupStepsHeadlineRight}}</h1>
+			<div class="passwordDisplay">
+				<img />
+			</div>
+			<div class="buttonbox">
+				<button class="previousButton small blue">{{setupStepsPreviousButtonLabel}}</button>
+				<button class="red cancelButton small">{{setupStepsCancelButtonLabel}}</button>
+				<button class="nextButton small blue">{{setupStepsNextButtonLabel}}</button>
+				<button class="hidden green finishButton">{{setupStepsFinishButtonLabel}}</button>
+			</div>
+		</div>
+		<div class="view" id="setupComplete">
+			<h1>{{setupCompleteHeadline}}</h1>
+			<div>
+				<p>{{setupCompleteExplanation}}<span class="numStepsPerLogin"></span>{{setupCompleteExplanationCont}}</p>
+				<p>TODO: Show explanation how to login (-> popup)</p>
+			</div>
+		</div>
+	</div>
+	<script src="../popup/jquery-3.1.1.min.js" type="text/javascript"></script>
+	<script src="../config.js" type="text/javascript"></script>
+	<script src="wizard.js" type="text/javascript"></script>
+</body>
+</html>
