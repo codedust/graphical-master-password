@@ -101,6 +101,8 @@ body {
 
 #container .view {
   display: none;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #bbb;
 }
 
 #container .view.active {
