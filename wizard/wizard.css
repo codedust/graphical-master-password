@@ -2,7 +2,6 @@
 
 body {
   overflow-x: hidden;
-  background: #ccc;
 }
 
 #container {
@@ -18,13 +17,16 @@ body {
 
 #container .buttonbox {
   text-align: center;
+  max-width: 400px;
+  margin: auto;
 }
 
 #container button {
   display: block;
   width: 100%;
-  margin: 1% 0;
-  padding: 3% 4%;
+  max-width: 400px;
+  margin: 0.5em auto;
+  padding: 0.5em; 4%;
   opacity: 0.8;
   color: #ffffff;
   font-size: 16px;
