@@ -207,6 +207,45 @@
   "changePasswordFinishButtonLabel": {
     "message": "Fertig",
     "description": "Label for the setup change password finish button."
-  }
+  },
   
+  "helpHeadline": {
+    "message": "Willkommen!",
+    "description": "Headline of the help section."
+  },
+  
+  "helpExplanationPartOne": {
+    "message": "Dieses Addon schützt ihre im Firefox-Passwortmanager gespeicherten Zugangsdaten mit einem grafischen Master-Passwort. Ein grafisches Passwort besteht aus einer Anzahl von Bildern, die man sich merken muss. Nur jemand, der weiß, aus welchen Bildern dass Passwort besteht, kann sich einloggen.",
+	"description": "First part of the explanation of the help section."
+  },
+  
+  "helpExplanationPartTwo": {   
+	"message": "Diese Technik bietet einige nützliche Vorteile gegenüber herkömmliche Passwörtern. Es ist viel einfacher, sich ein grafisches Passwort zu merken weil weil es sich die überragende Fähigkeit des Menschen, sich visuelle Informationen zu merken und diese zu verarbeiten zunutze macht. Bei jedem Login-Versuch muss ein Teil - aber nicht alle - der Bilder des Passworts ausgewählt werden. Das macht es einem Angreifer besonders schwer, Ihre Zugangsdaten zu stehlen",
+    "description": "Second part of the explanation of the help section."
+  },
+   
+  "helpInstructionsSetup": {
+    "message": "Später in der Authentifizierungsphase werden mehrere Bilder angezeigt, von denen exakt eins zur <i>bekannten Information</i> gehört.",
+	"description": "Instructions for the setup process."
+  },
+  
+  "helpInstructionsLogin": {
+    "message": "Im nächsten Schritt zeigt das Addon eine Auswahl von Bildern an. Wir nennen diese Bilder die <i>bekannte Information</i>. Ihr Passwort setzt sich aus diesem Bildern zusammen. Merken Sie sich diese gut.",
+    "description": "Instructions for the login process."
+  },
+  
+  "helpConfirmationButtonLabel": {
+    "message": "Ich habe verstanden.",
+    "description": "Label for the confirmation button of the help section."
+  },
+  
+  "helpScreenshotSetupUri": {
+    "message": "setup_de.png",
+    "description": "Uri for the setup screenshot in the help section."
+  },
+  
+  "helpScreenshotLoginUri": {
+    "message": "enter_password_de.png",
+    "description": "Uri for the login screenshot in the help section."
+  }
 }

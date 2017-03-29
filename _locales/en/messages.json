@@ -207,6 +207,46 @@
   "changePasswordFinishButtonLabel": {
     "message": "Finish",
     "description": "Label for the setup change password finish button."
+  },
+  
+  "helpHeadline": {
+    "message": "Welcome!",
+    "description": "Headline of the help section."
+  },
+  
+  "helpExplanationPartOne": {
+    "message": "This addon protects your credentials, stored in the Firefox password manager by encrypting them with a graphical master password. A graphical password consists of a number images that have to be memorized. Only the person who knows which images the password consists of is able to login.",
+    "description": "First part of the explanation of the help section."
+  },
+  
+  "helpExplanationPartTwo": {
+    "message": "This technique also provides some nice advantages against traditional passwords. A graphical password is much easier to remember because it makes use of the vast human capacity to store and process visual information. During each login attempt, some - but not all - of the images the password consists of have to be selected. This makes it especially hard for an adversary to steal your login credentials.",
+    "description": "Second part of the explanation of the help section."
+  },
+   
+  "helpInstructionsSetup": {
+    "message": "This addon will display a number of images in the next step. We call these images the <i>familiar information</i>. These images will make up your password. Remember them well!",
+    "description": "Instructions for the setup process."
+  },
+  
+  "helpInstructionsLogin": {
+    "message": "Multiple grids of images will later be shown in the authentication phase where exactly one image per grid is part of the <i>familiar information</i>. You will have to point out the one image that was shown kiwi fruit (first image in the third row) would be the correct image.",
+    "description": "Instructions for the login process."
+  },
+  
+  "helpConfirmationButtonLabel": {
+    "message": "I understood.",
+    "description": "Label for the confirmation button of the help section."
+  },
+  
+  "helpScreenshotSetupUri": {
+    "message": "setup_en.png",
+    "description": "Uri for the setup screenshot in the help section."
+  },
+  
+  "helpScreenshotLoginUri": {
+    "message": "enter_password_en.png",
+    "description": "Uri for the login screenshot in the help section."
   }
 
 }
