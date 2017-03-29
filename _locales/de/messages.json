@@ -225,12 +225,12 @@
   },
    
   "helpInstructionsSetup": {
-    "message": "Später in der Authentifizierungsphase werden mehrere Bilder angezeigt, von denen exakt eins zur <i>bekannten Information</i> gehört.",
+    "message": "Im ersten Schritt zeigt das Addon eine Auswahl von Bildern an. Wir nennen diese Bilder die <i>bekannte Information</i>. Ihr Passwort setzt sich aus diesem Bildern zusammen. Merken Sie sich diese gut.",
 	"description": "Instructions for the setup process."
   },
   
   "helpInstructionsLogin": {
-    "message": "Im nächsten Schritt zeigt das Addon eine Auswahl von Bildern an. Wir nennen diese Bilder die <i>bekannte Information</i>. Ihr Passwort setzt sich aus diesem Bildern zusammen. Merken Sie sich diese gut.",
+    "message": "Später in der Authentifizierungsphase werden mehrere Bilder angezeigt, von denen exakt ei-nes zur <i>bekannten Information</i> gehört. Sie müssen dieses eine Bild auswählen. Im Beispiel wäre also die Kiwi innerhalb der Galerie von Früchten (erstes Bild in der dritten Reihe) das richtige Bild.",
     "description": "Instructions for the login process."
   },
   
