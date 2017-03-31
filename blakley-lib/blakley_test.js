@@ -131,11 +131,11 @@ blakley.New(plaintextPortfolio).then(function(portfolio) {
 });
 
 // let's generate a random portfolio
-plaintextPortfolio = blakley.generateRandomPortfolio(numberOfGroups, numberOfImagesPerGroup, portfolioSize);
+var plaintextPortfolio2 = blakley.generateRandomPortfolio(numberOfGroups, numberOfImagesPerGroup, portfolioSize);
 
-blakley.New(plaintextPortfolio).then(function(portfolio) {
+blakley.New(plaintextPortfolio2).then(function(portfolio) {
   // generating correct user input ;)
-  var userInput = blakley.randomSampleArray(plaintextPortfolio).slice(0, t);
+  var userInput = blakley.randomSampleArray(plaintextPortfolio2).slice(0, t);
   userInput[1][1]++;
   blakley.verify(userInput, portfolio).then(function(secret) {
     test("verifyInvalid", true, false);
