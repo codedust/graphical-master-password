@@ -73,20 +73,15 @@
     "message": "Einrichtung abgeschlossen",
     "description": "Headline for the setup complete notification."
   },
-  
+    
   "setupCompleteExplanation": {
-    "message": "Jedes Mal beim Einloggen werden Ihnen ",
-    "description": "Explanation when setup is complete, first part."
+    "message": "Fertig! Die Einrichtung des graphischen Passwortes ist abgeschlossen. Um sich zu authentifizieren, klicken Sie bitte auf das Icon neben der Adresszeile Ihres Browsers.",
+    "description": "Explanation when setup is complete."
   },
   
-  "setupCompleteExplanationCont": {
-    "message": " zufällig gewählte Bildgalerien gezeigt werden. Jede Galerie wird ein Bild enthalten, das zu Ihrem grafischen Passwort gehört. Klicken Sie auf jedes dieser Bilder um sich zu autentifizieren.",
-    "description": "Explanation when setup is complete, second part."
-  },
-  
-  "setupCompleteLoginButtonLabel": {
-    "message": "Jetzt einloggen",
-    "description": "Label for the setup complete login button."
+  "setupCompleteMoreButtonLabel": {
+    "message": "Weitere Informationen anzeigen",
+    "description": "Label for the more button in the setup complete section."
   },
   
   "loginHeadline": {
@@ -105,7 +100,7 @@
   },
       
   "loginFailedExplanation": {
-    "message": "Oh nein, da ist irgendwo etwas schiefgelaufen.",
+    "message": "Oh nein! Mindestens eines der Bilder war nicht richtig.",
     "description": "Explanation for login failed dialog."
   },
     
@@ -215,7 +210,7 @@
   },
   
   "helpExplanationPartOne": {
-    "message": "Dieses Addon schützt ihre im Firefox-Passwortmanager gespeicherten Zugangsdaten mit einem grafischen Master-Passwort. Ein grafisches Passwort besteht aus einer Anzahl von Bildern, die man sich merken muss. Nur jemand, der weiß, aus welchen Bildern dass Passwort besteht, kann sich einloggen.",
+    "message": "Dieses Addon schützt Ihre im Passwort-Manager von Firefox gespeicherten Zugangsdaten mit einem grafischen Master-Passwort. Ein grafisches Passwort besteht aus einer Anzahl von Bildern, die man sich merken muss. Nur wer weiß, aus welchen Bildern dass Passwort besteht, kann sich einloggen.",
 	"description": "First part of the explanation of the help section."
   },
   
@@ -230,7 +225,7 @@
   },
   
   "helpInstructionsLogin": {
-    "message": "Später in der Authentifizierungsphase werden mehrere Bilder angezeigt, von denen exakt ei-nes zur <i>bekannten Information</i> gehört. Sie müssen dieses eine Bild auswählen. Im Beispiel wäre also die Kiwi innerhalb der Galerie von Früchten (erstes Bild in der dritten Reihe) das richtige Bild.",
+    "message": "Später in der Authentifizierungsphase werden mehrere Bilder angezeigt, von denen exakt eines zur <i>bekannten Information</i> gehört. Sie müssen dieses eine Bild auswählen. Im Beispiel wäre also die Kiwi innerhalb der Galerie von Früchten (erstes Bild in der dritten Reihe) das richtige Bild.",
     "description": "Instructions for the login process."
   },
   
@@ -248,4 +243,5 @@
     "message": "enter_password_de.png",
     "description": "Uri for the login screenshot in the help section."
   }
+  
 }

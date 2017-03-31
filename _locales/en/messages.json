@@ -73,20 +73,15 @@
     "message": "Setup Complete",
     "description": "Headline for the setup complete notification."
   },
-  
+      
   "setupCompleteExplanation": {
-    "message": "Whenever you log in, you will be presented with ",
-    "description": "Explanation when setup is complete, first part."
+    "message": "Done! Your graphical master password is ready to use. Please click on the icon next to the address bar of your browser in order to authenticate yourself.",
+    "description": "Explanation when setup is complete."
   },
   
-  "setupCompleteExplanationCont": {
-    "message": " random image galleries. Each gallery will contain one of the images from your graphical password. Click on each of these images to authenticate yourself.",
-    "description": "Explanation when setup is complete, second part."
-  },
-  
-  "setupCompleteLoginButtonLabel": {
-    "message": "Login Now",
-    "description": "Label for the setup complete login button."
+  "setupCompleteMoreButtonLabel": {
+    "message": "Show more info",
+    "description": "Label for the more button in the setup complete section."
   },
   
   "loginHeadline": {
@@ -230,7 +225,7 @@
   },
   
   "helpInstructionsLogin": {
-    "message": "Multiple grids of images will later be shown in the authentication phase where exactly one image per grid is part of the <i>familiar information</i>. You will have to point out the one image that was shown kiwi fruit (first image in the third row) would be the correct image.",
+    "message": "Multiple grids of images will later be shown in the authentication phase where exactly one image per grid is part of the <i>familiar information</i>. You will have to point out the one image that was shown. In this example, the kiwi fruit (first image in the third row) would be the correct image.",
     "description": "Instructions for the login process."
   },
   
