@@ -6,6 +6,8 @@ The addon makes use of the vast human capacity to store and process visual infor
 
 Blakley (t,n)-secret-sharing is used to prevent shoulder-surfing attacks by retrieving the shared secret from a subset of the images that are part of the *familiar information*. During each authentication attempt, a random subset of the *familiar information* has to be provided by the user.
 
+![Screenshot of the addon](screenshot.png)
+
 ## Installation
 To use this addon, install Firefox Developer Edition or Firefox Nightly (these allow you to disable signature checks for addons). Signature checks can be disabled by setting `xpinstall.signatures.required` to `false` in `about:config`.
 
